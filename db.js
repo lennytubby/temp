@@ -1,15 +1,22 @@
-const {Client} = require('pg')
+const { Client } = require('pg')
 const client = new Client({
     user: "postgres",
     password: "SbotmtWigrm.1",
     host: "127.0.0.1",
     database: "doppelkopf"
 })
+var data = { "re": {} }
+data.re.spieler1 = "Lenny"
+data.re.spieler2 = "Tassi"
+data.re.ansage = true
+data.re.fuchs = 0
+data.re.doppelkopf = 0
+data.re.karlchen = false
 
 client.connect()
-.then(() => console.log("Connected successfuly"))
-.then(() => client.query("insert into Re (ID, Solo, Spieler1, Spieler2, Sieg, Punkte, Ansage, Absge, Fuchs, Doppelkopf, Karlchen\
-"VALUES ("+ data.solo + ", " + data.spieler1 + ", " + data.spieler2 + ", " + data.sieg))
-.then(results => console.table(results.rows))
-.catch(e => console.log(e))
-.finally(() => client.end())
+    .then(() => console.log("Connected successfuly"))
+    .then(() => client.query("insert into Re (Solo, Spieler1, Spieler2, Punkte, Ansage, Absge, Fuchs, Doppelkopf, Karlchen) \
+                        VALUES (" + data.re.solo + ", " + data.re.spieler1 + ", " + data.re.spieler2 + ", " + data.re.punkte + ", " + data.re.ansage + ", " + data.re.absage + ", " + data.re.fuchs + ", " + data.re.doppelkopf + ", " + data.re.karlchen + ")"))
+    .then(results => console.table(results.rows))
+    .catch(e => console.log(e))
+    .finally(() => client.end())
