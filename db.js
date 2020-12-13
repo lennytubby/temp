@@ -16,13 +16,13 @@ data.re.fuchs = 0
 data.re.doppelkopf = 0
 data.re.karlchen = false
 
-var re_query = "INSERT INTO Re (Solo, Spieler1, Spieler2, Punkte, Ansage, Absage, Fuchs, Doppelkopf, Karlchen) " +
-    "VALUES (" + data.re.solo + ", " + data.re.spieler1 + ", " + data.re.spieler2 + ", " + data.re.punkte + ", " + data.re.ansage + ", " + data.re.absage + ", " + data.re.fuchs + ", " + data.re.doppelkopf + ", " + data.re.karlchen + ");"
+var re_query = "INSERT INTO Re(Solo, Spieler1, Spieler2, Punkte, Ansage, Absage, Fuchs, Doppelkopf, Karlchen) " +
+    "VALUES (\'" + data.re.solo + "\', \'" + data.re.spieler1 + "\', \'" + data.re.spieler2 + "\', " + data.re.punkte + ", " + data.re.ansage + ", " + data.re.absage + ", " + data.re.fuchs + ", " + data.re.doppelkopf + ", " + data.re.karlchen + ") RETURNING id;"
 
 console.log(re_query)
 client.connect()
     .then(() => console.log("Connected successfuly"))
     .then(() => client.query(re_query))
-    .then(results => console.table(results.rows))
+    .then(results => {console.table(JSON.stringify(results));console.log(results)})
     .catch(e => console.log(e))
     .finally(() => client.end())
