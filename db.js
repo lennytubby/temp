@@ -112,6 +112,7 @@ async function insert_data(data) {
         var results = await client.query(spiel_query)
         console.log(results)
         var spiel_id = results.rows[0].id
+        console.log(spiel_id)
     }
 }
 insert_data(data)
