@@ -106,7 +106,7 @@ async function insert_data(data) {
         } else {
             console.log("Sieger nicht eindeutig")
         }
-        var spiel_query = "INSERT INTO Spiel (Gruppe, Sieger, Verlierer, Punkte) VALUES (" + data.gruppe + ", "
+        var spiel_query = "INSERT INTO Spiel (Gruppe, Sieger, Verlierer, Punkte) VALUES (" + data.gruppe + ", " +
         sieger + ", " + verlierer + ", " + data.punkte + ");"
         console.log(spiel_query)
         var results = await client.query(spiel_query)
