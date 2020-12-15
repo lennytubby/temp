@@ -82,9 +82,9 @@ async function insert_data(data) {
             var kontra_spieler2 = data.kontra.spieler2
         }
         if (data.kontra.spieler3) {
-            var kontra_spieler2 = "\'" + data.kontra.spieler2 + "\'"
+            var kontra_spieler3 = "\'" + data.kontra.spieler3 + "\'"
         } else {
-            var kontra_spieler2 = data.kontra.spieler2
+            var kontra_spieler3 = data.kontra.spieler3
         }
         var kontra_query = "INSERT INTO Kontra(Spieler1, Spieler2, Spieler3, Punkte, Ansage, Absage, Fuchs, Doppelkopf, Karlchen) " +
             "VALUES (" + kontra_spieler1 + ", " + kontra_spieler2 + ", " + kontra_spieler3 + ", " + data.kontra.punkte + ", " + data.kontra.ansage + ", " + data.kontra.absage + ", " + data.kontra.fuchs + ", " + data.kontra.doppelkopf + ", " + data.kontra.karlchen + ") RETURNING id;"
