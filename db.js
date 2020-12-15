@@ -31,6 +31,8 @@ data.kontra.doppelkopf = 0
 data.kontra.karlchen = false
 
 data.sieger = "re"
+data.punkte = 3
+data.gruppe = 1
     /*
         var re_query = "INSERT INTO Re(Solo, Spieler1, Spieler2, Punkte, Ansage, Absage, Fuchs, Doppelkopf, Karlchen) " +
             "VALUES (" + null + ", \'" + data.re.spieler1 + "\', \'" + data.re.spieler2 + "\', " + data.re.punkte + ", " + data.re.ansage + ", " + data.re.absage + ", " + data.re.fuchs + ", " + data.re.doppelkopf + ", " + data.re.karlchen + ") RETURNING id;"
