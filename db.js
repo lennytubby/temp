@@ -33,30 +33,25 @@ data.kontra.karlchen = false
 data.sieger = "re"
 data.punkte = 3
 data.gruppe = 1
-    /*
-        var re_query = "INSERT INTO Re(Solo, Spieler1, Spieler2, Punkte, Ansage, Absage, Fuchs, Doppelkopf, Karlchen) " +
-            "VALUES (" + null + ", \'" + data.re.spieler1 + "\', \'" + data.re.spieler2 + "\', " + data.re.punkte + ", " + data.re.ansage + ", " + data.re.absage + ", " + data.re.fuchs + ", " + data.re.doppelkopf + ", " + data.re.karlchen + ") RETURNING id;"
 
-        console.log(re_query)
-        client.connect()
-            .then(() => console.log("Connected successfuly"))
-            .then(() => client.query(re_query))
-            .then(results => { var re_id = results.rows[0].id; return re_id })
-            .catch(e => console.log(e))
-            .finally(() => client.end())
 
-        */
 async function insert_data(data) {
     // Connect
     try {
         await client.connect()
     } catch(e) {
-        console.error('connection error',  e.stack)
-        return 0
+        return 'connection error : ' +  e.detail
     }
 
     if (data.fehlspiel) {
-
+        var spiel_query = "INSERT INTO Spiel (Gruppe, Punkte, Fehlspiel) VALUES (" + data.gruppe + ", " +
+        12 + ", " + data.Spielfehler + ") RETURNING id;"
+        try {
+            var results = await client.query(spiel_query)
+        } catch(e) {
+            return "Spiel INSERT error : " + e.detail + "\nSpiel Query :\n" + spiel_query
+        }
+        return results.rows[0].id
     } else {
         
         //RE
@@ -80,9 +75,7 @@ async function insert_data(data) {
         try {
             var results = await client.query(re_query)
         } catch(e) {
-            console.log("Spiel INSERT error", e.stack)
-            console.log("Re Query :\n" + re_query)
-            return 1;
+            return "Spiel INSERT error : " + e.detail + "\nRe Query :\n" + re_query
         }
         var re_id = results.rows[0].id
 
@@ -107,9 +100,7 @@ async function insert_data(data) {
         try {
             var results = await client.query(kontra_query)
         } catch(e) {
-            console.log("Kontra INSERT error", e.stack)
-            console.log("Kontra Query :\n" + kontra_query)
-            return 1
+            return "Kontra INSERT error : " + e.detail + "\nKontra Query :\n" + kontra_query
         }
         var kontra_id = results.rows[0].id
 
@@ -121,24 +112,24 @@ async function insert_data(data) {
             var sieger = kontra_id
             var verlierer = re_id
         } else {
-            console.log("Sieger nicht eindeutig")
-            return 1
+            return "Sieger nicht eindeutig"
         }
         var spiel_query = "INSERT INTO Spiel (Gruppe, Sieger, Verlierer, Punkte) VALUES (" + data.gruppe + ", " +
         sieger + ", " + verlierer + ", " + data.punkte + ") RETURNING id;"
         try {
             var results = await client.query(spiel_query)
         } catch(e) {
-            console.log("Spiel INSERT error", e.stack)
-            console.log("Spiel Query :\n" + spiel_query)
-            return 1;
+            return "Spiel INSERT error : " + e.detail + "\nSpiel Query :\n" + spiel_query
         }
-        var spiel_id = results.rows[0].id
-        //console.log("Created Spiel :" + spiel_id)
 
-        client.end().catch(err => console.log('error during disconnection', err.stack))
+        try {
+            await client.end()
+        } catch (e){
+            return 'error during disconnection' + e.detail
+        }
+        return results.rows[0].id
     }
 }
 insert_data(data)
-
+//module.exports.insert_data = insert_data
 //module.exports.insert_data = insert_data
