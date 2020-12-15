@@ -29,6 +29,8 @@ data.kontra.absage = null
 data.kontra.fuchs = 0
 data.kontra.doppelkopf = 0
 data.kontra.karlchen = false
+
+data.sieger = "re"
     /*
         var re_query = "INSERT INTO Re(Solo, Spieler1, Spieler2, Punkte, Ansage, Absage, Fuchs, Doppelkopf, Karlchen) " +
             "VALUES (" + null + ", \'" + data.re.spieler1 + "\', \'" + data.re.spieler2 + "\', " + data.re.punkte + ", " + data.re.ansage + ", " + data.re.absage + ", " + data.re.fuchs + ", " + data.re.doppelkopf + ", " + data.re.karlchen + ") RETURNING id;"
@@ -96,12 +98,15 @@ async function insert_data(data) {
         if (data.sieger == "re") {
             var sieger = re_id
             var verlierer = kontra_id
-        } else {
+        } else if (data.sieger == "kontra") {
             var sieger = kontra_id
             var verlierer = re_id
+        } else {
+            console.log("Sieger nicht eindeutig")
         }
         var spiel_query = "INSERT INTO Spiel (Gruppe, Sieger, Verlierer, Punkte) VALUES (" + data.gruppe + ", "
         sieger + ", " + verlierer + ", " + data.punkte + ");"
+        console.log(spiel_query)
         var results = await client.query(spiel_query)
         console.log(results)
         var spiel_id = results.rows[0].id
