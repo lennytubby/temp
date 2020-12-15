@@ -47,11 +47,18 @@ data.gruppe = 1
 
         */
 async function insert_data(data) {
-    await client.connect()
+    // Connect
+    try {
+        await client.connect()
+    } catch(e) {
+        console.error('connection error',  e.stack)
+        return 0
+    }
 
     if (data.fehlspiel) {
 
     } else {
+        
         //RE
         if (data.re.solo) {
             var re_solo = "\'" + data.re.solo + "\'"
@@ -70,7 +77,11 @@ async function insert_data(data) {
         }
         var re_query = "INSERT INTO Re(Solo, Spieler1, Spieler2, Punkte, Ansage, Absage, Fuchs, Doppelkopf, Karlchen) " +
             "VALUES (" + re_solo + ", " + re_spieler1 + ", " + re_spieler2 + ", " + data.re.punkte + ", " + data.re.ansage + ", " + data.re.absage + ", " + data.re.fuchs + ", " + data.re.doppelkopf + ", " + data.re.karlchen + ") RETURNING id;"
-        var results = await client.query(re_query)
+        try {
+            var results = await client.query(re_query)
+        } catch(e) {
+            console.log("Spiel INSERT error", e.stack)
+        }
         console.log(results)
         var re_id = results.rows[0].id
 
@@ -92,7 +103,11 @@ async function insert_data(data) {
         }
         var kontra_query = "INSERT INTO Kontra(Spieler1, Spieler2, Spieler3, Punkte, Ansage, Absage, Fuchs, Doppelkopf, Karlchen) " +
             "VALUES (" + kontra_spieler1 + ", " + kontra_spieler2 + ", " + kontra_spieler3 + ", " + data.kontra.punkte + ", " + data.kontra.ansage + ", " + data.kontra.absage + ", " + data.kontra.fuchs + ", " + data.kontra.doppelkopf + ", " + data.kontra.karlchen + ") RETURNING id;"
-        var results = await client.query(kontra_query)
+        try {
+            var results = await client.query(kontra_query)
+        } catch(e) {
+            console.log("Kontra INSERT error", e.stack)
+        }
         console.log(results)
         var kontra_id = results.rows[0].id
 
@@ -109,10 +124,16 @@ async function insert_data(data) {
         var spiel_query = "INSERT INTO Spiel (Gruppe, Sieger, Verlierer, Punkte) VALUES (" + data.gruppe + ", " +
         sieger + ", " + verlierer + ", " + data.punkte + ") RETURNING id;"
         console.log(spiel_query)
-        var results = await client.query(spiel_query)
+        try {
+            var results = await client.query(spiel_query)
+        } catch(e) {
+            console.log("Spiel INSERT error", e.stack)
+        }
         console.log(results)
         var spiel_id = results.rows[0].id
-        console.log(spiel_id)
+        console.log("Created Spiel :" + spiel_id)
+
+        client.end().catch(err => console.log('error during disconnection', err.stack))
     }
 }
 insert_data(data)
