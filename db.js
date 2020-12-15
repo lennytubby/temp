@@ -118,16 +118,17 @@ async function insert_data(data) {
         sieger + ", " + verlierer + ", " + data.punkte + ") RETURNING id;"
         try {
             var results = await client.query(spiel_query)
+            try {
+                await client.end()
+            } catch (e){
+                return 'error during disconnection' + e.detail
+            }
+            return results.rows[0].id
         } catch(e) {
             return "Spiel INSERT error : " + e.detail + "\nSpiel Query :\n" + spiel_query
         }
 
-        try {
-            await client.end()
-        } catch (e){
-            return 'error during disconnection' + e.detail
-        }
-        return results.rows[0].id
+        
     }
 }
 insert_data(data)
