@@ -10,15 +10,22 @@ var data = {
     "re": {},
     "kontra": {}
 }
-data.re.punkte = 122
+data.re.solo = "Bubensolo"
 data.re.spieler1 = "Lenny"
 data.re.spieler2 = "Tassi"
+data.re.punkte = 122
 data.re.ansage = true
+data.re.absage = null
 data.re.fuchs = 0
 data.re.doppelkopf = 0
 data.re.karlchen = false
 
 data.kontra.spieler1 = "Neli"
+data.kontra.spieler2 = "Frank"
+data.kontra.spieler3 = null
+data.kontra.punkte = 118
+ata.kontra.ansage = false
+ata.kontra.absage = null
 data.kontra.fuchs = 0
 data.kontra.doppelkopf = 0
 data.kontra.karlchen = false
