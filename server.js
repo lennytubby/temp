@@ -17,7 +17,8 @@ app.use(basicAuth({
 app.use(express.json())
 
 app.post("/", function(req,res){
-    res.end(db.insert_data(req.body))
+    db.insert_data(req.body)
+        .then(str => res.end(str))
 })
 
 
