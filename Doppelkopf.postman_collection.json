@@ -1,0 +1,49 @@
+{
+	"info": {
+		"_postman_id": "5cd2bd69-d646-4ab0-b332-d91cfa0e3f6d",
+		"name": "Doppelkopf",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "sendData",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "SuperDuperPassword.1",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "lenny",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"sieger\": \"Kontra\",\n    \"punkte\": 5,\n    \"gruppe\": 1,\n    \"re\": {\n        \"solo\":\"Bubensolo\",\n        \"spieler1\": \"Lenny\",\n        \"spieler2\": null,\n        \"punkte\": 30,\n        \"ansage\": true,\n        \"absage\": 90,\n        \"fuchs\": 0,\n        \"karlchen\": false,\n        \"doppelkopf\": 0\n    },\n    \"kontra\": {\n        \"spieler1\": \"Tassi\",\n        \"spieler2\": \"Neli\",\n        \"spieler3\": \"Frank\",\n        \"punkte\": 200,\n        \"ansage\": null,\n        \"absage\": null,\n        \"fuchs\": 0,\n        \"karlchen\": false,\n        \"doppelkopf\": 0\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "hipercap.de:8880",
+					"host": [
+						"hipercap",
+						"de"
+					],
+					"port": "8880"
+				}
+			},
+			"response": []
+		}
+	]
+}
