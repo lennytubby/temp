@@ -41,6 +41,7 @@ async function insert_data(data) {
     try {
         await client.connect()
     } catch(e) {
+        console.log(e)
         return 'connection error : ' +  e.detail
     }
 
@@ -50,6 +51,7 @@ async function insert_data(data) {
         try {
             var results = await client.query(spiel_query)
         } catch(e) {
+            console.log(e)
             return "Spiel INSERT error : " + e.detail + "\nSpiel Query :\n" + spiel_query
         }
         return results.rows[0].id
@@ -76,6 +78,7 @@ async function insert_data(data) {
         try {
             var results = await client.query(re_query)
         } catch(e) {
+            console.log(e)
             return "Spiel INSERT error : " + e.detail + "\nRe Query :\n" + re_query
         }
         var re_id = results.rows[0].id
@@ -101,6 +104,7 @@ async function insert_data(data) {
         try {
             var results = await client.query(kontra_query)
         } catch(e) {
+            console.log(e)
             return "Kontra INSERT error : " + e.detail + "\nKontra Query :\n" + kontra_query
         }
         var kontra_id = results.rows[0].id
@@ -114,12 +118,14 @@ async function insert_data(data) {
         try {
             var results = await client.query(spiel_query)
         } catch(e) {
+            console.log(e)
             return "Spiel INSERT error : " + e.detail + "\nSpiel Query :\n" + spiel_query
         }
 
         try {
             await client.end()
         } catch (e){
+            console.log(e)
             return 'error during disconnection' + e.detail
         }
         return results.rows[0].id
