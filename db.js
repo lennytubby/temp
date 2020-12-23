@@ -125,6 +125,5 @@ async function insert_data(data) {
         return results.rows[0].id
     }
 }
-insert_data(data)
 module.exports.insert_data = insert_data
 //module.exports.insert_data = insert_data
