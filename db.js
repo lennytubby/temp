@@ -37,6 +37,7 @@ data.gruppe = 1
 
 */
 async function insert_data(data) {
+    try{
     // Connect
     try {
         await client.connect()
@@ -105,7 +106,7 @@ async function insert_data(data) {
             var results = await client.query(kontra_query)
         } catch(e) {
             console.log(e)
-            return "Kontra INSERT error : " + e.detail + "\nKontra Query :\n" + kontra_query
+            return "Kontra INSERT error : " + e.detail + "\nKontra Query :\n" + kontra_querysp
         }
         var kontra_id = results.rows[0].id
 
@@ -130,6 +131,9 @@ async function insert_data(data) {
         }
         return results.rows[0].id
     }
+} catch(e){
+    console.log(e)
+}
 }
 module.exports.insert_data = insert_data
 //module.exports.insert_data = insert_data
