@@ -37,13 +37,11 @@ data.gruppe = 1
 
 */
 async function insert_data(data) {
-    try{
     // Connect
     try {
         await client.connect()
     } catch(e) {
-        console.log(e)
-        return 'connection error : ' +  e.detail
+        return 'connection error : ' +  e.detail + " , " + e.hint
     }
 
     if (data.fehlspiel) {
@@ -52,8 +50,7 @@ async function insert_data(data) {
         try {
             var results = await client.query(spiel_query)
         } catch(e) {
-            console.log(e)
-            return "Spiel INSERT error : " + e.detail + "\nSpiel Query :\n" + spiel_query
+            return "Spiel INSERT error : " + e.detail + " , " + e.hint + "\nSpiel Query :\n" + spiel_query
         }
         return results.rows[0].id
     } else {
@@ -79,8 +76,7 @@ async function insert_data(data) {
         try {
             var results = await client.query(re_query)
         } catch(e) {
-            console.log(e)
-            return "Spiel INSERT error : " + e.detail + "\nRe Query :\n" + re_query
+            return "Spiel INSERT error : " + e.detail + " , " + e.hint + "\nRe Query :\n" + re_query
         }
         var re_id = results.rows[0].id
 
@@ -105,8 +101,7 @@ async function insert_data(data) {
         try {
             var results = await client.query(kontra_query)
         } catch(e) {
-            console.log(e)
-            return "Kontra INSERT error : " + e.detail + "\nKontra Query :\n" + kontra_querysp
+            return "Kontra INSERT error : " + e.detail + " , " + e.hint + "\nKontra Query :\n" + kontra_querysp
         }
         var kontra_id = results.rows[0].id
 
@@ -119,21 +114,16 @@ async function insert_data(data) {
         try {
             var results = await client.query(spiel_query)
         } catch(e) {
-            console.log(e)
-            return "Spiel INSERT error : " + e.detail + "\nSpiel Query :\n" + spiel_query
+            return "Spiel INSERT error : " + e.detail + " , " + e.hint + "\nSpiel Query :\n" + spiel_query
         }
 
         try {
             await client.end()
         } catch (e){
-            console.log(e)
-            return 'error during disconnection' + e.detail
+            return 'error during disconnection' + e.detail + " , " + e.hint
         }
-        return results.rows[0].id
+        return "Spiel " + results.rows[0].id + " gespeichert"
     }
-} catch(e){
-    console.log(e)
-}
 }
 module.exports.insert_data = insert_data
 //module.exports.insert_data = insert_data
