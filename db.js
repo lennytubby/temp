@@ -6,6 +6,7 @@ const client = new Client({
     database: "doppelkopf"
 })
 
+/*
 var data = {
     "re": {},
     "kontra": {}
@@ -34,7 +35,7 @@ data.sieger = "re"
 data.punkte = 3
 data.gruppe = 1
 
-
+*/
 async function insert_data(data) {
     // Connect
     try {
@@ -105,17 +106,11 @@ async function insert_data(data) {
         var kontra_id = results.rows[0].id
 
         // Spiel
-        if (data.sieger == "re") {
-            var sieger = re_id
-            var verlierer = kontra_id
-        } else if (data.sieger == "kontra") {
-            var sieger = kontra_id
-            var verlierer = re_id
-        } else {
+       if (!(data.sieger == "Re" || data.sieger == "Kontra")){
             return "Sieger nicht eindeutig"
         }
-        var spiel_query = "INSERT INTO Spiel (Gruppe, Sieger, Verlierer, Punkte) VALUES (" + data.gruppe + ", " +
-        sieger + ", " + verlierer + ", " + data.punkte + ") RETURNING id;"
+        var spiel_query = "INSERT INTO Spiel (Gruppe, Re, Kontra, Punkte, Sieger) VALUES (" + data.gruppe + ", " +
+        re_id + ", " + kontra_id + ", " + data.punkte + ", " + data.sieger + ") RETURNING id;"
         try {
             var results = await client.query(spiel_query)
         } catch(e) {
