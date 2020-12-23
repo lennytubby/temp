@@ -131,5 +131,5 @@ async function insert_data(data) {
     }
 }
 insert_data(data)
-//module.exports.insert_data = insert_data
+module.exports.insert_data = insert_data
 //module.exports.insert_data = insert_data
