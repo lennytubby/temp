@@ -105,7 +105,7 @@ async function insert_data(data) {
             var results = await client.query(kontra_query)
         } catch(e) {
             console.log(e)
-            return "Kontra INSERT error : " + e.detail + "\nKontra Query :\n" + kontra_querysp
+            return "Kontra INSERT error : " + e.detail + "\nKontra Query :\n" + kontra_query
         }
         var kontra_id = results.rows[0].id
 
