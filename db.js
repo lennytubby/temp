@@ -105,7 +105,7 @@ async function insert_data(data) {
             var results = await client.query(kontra_query)
         } catch(e) {
             console.log(e)
-            return "Kontra INSERT error : " + e.detail + "\nKontra Query :\n" + kontra_query
+            return "Kontra INSERT error : " + e.detail + "\nKontra Query :\n" + kontra_querysp
         }
         var kontra_id = results.rows[0].id
 
@@ -114,7 +114,7 @@ async function insert_data(data) {
             return "Sieger nicht eindeutig"
         }
         var spiel_query = "INSERT INTO Spiel (Gruppe, Re, Kontra, Punkte, Sieger) VALUES (" + data.gruppe + ", " +
-        re_id + ", " + kontra_id + ", " + data.punkte + ", " + data.sieger + ") RETURNING id;"
+        re_id + ", " + kontra_id + ", " + data.punkte + ", \'" + data.sieger + "\') RETURNING id;"
         try {
             var results = await client.query(spiel_query)
         } catch(e) {
