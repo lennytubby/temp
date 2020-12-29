@@ -134,11 +134,11 @@ async function get_gruppen(){
     } catch(e) {
         return 'connection error : ' +  e.detail + " , " + e.hint
     }
-    var query = "select name form gruppen;"
+    var query = "select name form gruppe;"
     try {
         var results = await client.query(query)
     } catch(e) {
-        return "Get Gruppen error : " + e.detail + " , " + e.hint + "\n" + e
+        return "Get Gruppen error : " + e.detail + " , " + e.hint
     }
     console.log(results)
     console.log(results.rows)
