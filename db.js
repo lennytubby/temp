@@ -131,7 +131,7 @@ async function get_gruppen(){
     try {
         await client.connect()
     } catch(e) {
-        return 'connection error : ' +  e.detail + " , " + e.hint
+        return 'connection error : ' +  e.detail + " , " + e.hint + ", " + JSON.stringify(e)
     }
     var query = "select name from gruppe;"
     try {
