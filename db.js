@@ -140,6 +140,11 @@ async function get_gruppen(){
         return JSON.stringify(e)
         //return "Get Gruppen error : " + e.detail + " , " + e.hint
     }
+    try {
+        await client.end()
+    } catch (e){
+        return 'error during disconnection' + e.detail + " , " + e.hint
+    }
     return JSON.stringify(results.rows)
 }
 module.exports.get_gruppen = get_gruppen
@@ -155,6 +160,11 @@ async function get_spieler(gruppe){
         var results = await client.query(query)
     } catch(e) {
         return "Get Gruppen error : " + e.detail + " , " + e.hint
+    }
+    try {
+        await client.end()
+    } catch (e){
+        return 'error during disconnection' + e.detail + " , " + e.hint
     }
     return JSON.stringify(results.rows)
 }
