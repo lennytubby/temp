@@ -125,8 +125,7 @@ async function insert_data(data) {
         return "Spiel " + results.rows[0].id + " gespeichert"
     }
 }
-//module.exports.insert_data = insert_data
-//module.exports.insert_data = insert_data
+module.exports.insert_data = insert_data
 
 async function get_gruppen(){
     try {
@@ -140,7 +139,22 @@ async function get_gruppen(){
     } catch(e) {
         return "Get Gruppen error : " + e.detail + " , " + e.hint
     }
-    console.log(results)
-    console.log(results.rows)
+    return results.rows
 }
-get_gruppen().then(x=>console.log(x))
+module.exports.get_gruppen = get_gruppen
+
+async function get_spieler(gruppe){
+    try {
+        await client.connect()
+    } catch(e) {
+        return 'connection error : ' +  e.detail + " , " + e.hint
+    }
+    var query = "select name, bild from spieler, gruppenmitglieder gm where gruppe = " + gruppe + " and spieler.name = gm.spieler;"
+    try {
+        var results = await client.query(query)
+    } catch(e) {
+        return "Get Gruppen error : " + e.detail + " , " + e.hint
+    }
+    return results.rows
+}
+module.exports.get_gruppen = get_spieler
