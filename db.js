@@ -138,22 +138,18 @@ async function get_gruppen(){
     try {
         var client = await pool.connect()
     } catch(e) {
-        client.release()
         return 'connection error : ' +  e.detail + " , " + e.hint + ", " + JSON.stringify(e)
     }
     var query = "select name from gruppe;"
     try {
         var results = await client.query(query)
     } catch(e) {
-        client.release()
         return JSON.stringify(e)
         //return "Get Gruppen error : " + e.detail + " , " + e.hint
     }
-    try {
+    finally  {
         await client.release()
-    } catch (e){
-        return 'error during disconnection' + e.detail + " , " + e.hint
-    }
+    } 
     return JSON.stringify(results.rows)
 }
 module.exports.get_gruppen = get_gruppen
