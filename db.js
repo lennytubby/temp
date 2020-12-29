@@ -140,7 +140,7 @@ async function get_gruppen(){
         return JSON.stringify(e)
         //return "Get Gruppen error : " + e.detail + " , " + e.hint
     }
-    return results.rows
+    return JSON.stringify(results.rows)
 }
 module.exports.get_gruppen = get_gruppen
 
@@ -156,6 +156,6 @@ async function get_spieler(gruppe){
     } catch(e) {
         return "Get Gruppen error : " + e.detail + " , " + e.hint
     }
-    return results.rows
+    return JSON.stringify(results.rows)
 }
 module.exports.get_spieler = get_spieler
