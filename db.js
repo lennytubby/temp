@@ -138,7 +138,7 @@ async function get_gruppen(){
     try {
         var results = await client.query(query)
     } catch(e) {
-        return "Get Gruppen error : " + e.detail + " , " + e.hint
+        return "Get Gruppen error : " + e.detail + " , " + e.hint + "\n" + e
     }
     console.log(results)
     console.log(results.rows)
