@@ -1,5 +1,12 @@
 const { Client } = require('pg')
-const client = new Client({
+const pool  = new Pool({
+    user: "postgres",
+    password: "SbotmtWigrm.1",
+    host: "127.0.0.1",
+    database: "doppelkopf"
+})
+
+const client  = new Client({
     user: "postgres",
     password: "SbotmtWigrm.1",
     host: "127.0.0.1",
@@ -129,19 +136,21 @@ module.exports.insert_data = insert_data
 
 async function get_gruppen(){
     try {
-        await client.connect()
+        var client = await pool.connect()
     } catch(e) {
+        client.release()
         return 'connection error : ' +  e.detail + " , " + e.hint + ", " + JSON.stringify(e)
     }
     var query = "select name from gruppe;"
     try {
         var results = await client.query(query)
     } catch(e) {
+        client.release()
         return JSON.stringify(e)
         //return "Get Gruppen error : " + e.detail + " , " + e.hint
     }
     try {
-        await client.end()
+        await client.release()
     } catch (e){
         return 'error during disconnection' + e.detail + " , " + e.hint
     }
