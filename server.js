@@ -22,7 +22,7 @@ app.post("/", function(req,res){
 })
 
 app.get("/gruppen", function(req,res){
-    db.get_gruppen(req.body)
+    db.get_gruppen()
         .then(str => res.end(str))
 })
 
