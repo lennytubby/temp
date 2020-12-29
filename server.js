@@ -3,6 +3,7 @@
 const express = require('express');
 const db = require("./db.js")
 const basicAuth = require('express-basic-auth')
+var cors = require('cors')
 //const spawn = require("child_process").spawn; used in html router
 
 // Constants
@@ -15,6 +16,7 @@ app.use(basicAuth({
     users: { 'lenny': 'SuperDuperPassword.1' }
 }))
 app.use(express.json())
+app.use(cors())
 
 app.post("/", function(req,res){
     db.insert_data(req.body)
