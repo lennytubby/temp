@@ -143,4 +143,4 @@ async function get_gruppen(){
     console.log(results)
     console.log(results.rows)
 }
-console.log(get_gruppen())
+get_gruppen().then(x=>console.log(x))
