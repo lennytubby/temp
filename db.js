@@ -1,12 +1,5 @@
-const { Pool, Client } = require('pg')
+const { Pool } = require('pg')
 const pool  = new Pool({
-    user: "postgres",
-    password: "SbotmtWigrm.1",
-    host: "127.0.0.1",
-    database: "doppelkopf"
-})
-
-const client  = new Client({
     user: "postgres",
     password: "SbotmtWigrm.1",
     host: "127.0.0.1",
@@ -46,7 +39,7 @@ data.gruppe = 1
 async function insert_data(data) {
     // Connect
     try {
-        await client.connect()
+        var client = await pool.connect()
     } catch(e) {
         return 'connection error : ' +  e.detail + " , " + e.hint
     }
@@ -123,12 +116,9 @@ async function insert_data(data) {
         } catch(e) {
             return "Spiel INSERT error : " + e.detail + " , " + e.hint + "\nSpiel Query :\n" + spiel_query
         }
-
-        try {
-            await client.end()
-        } catch (e){
-            return 'error during disconnection' + e.detail + " , " + e.hint
-        }
+        finally  {
+            client.release()
+        } 
         return "Spiel " + results.rows[0].id + " gespeichert"
     }
 }
@@ -148,7 +138,7 @@ async function get_gruppen(){
         //return "Get Gruppen error : " + e.detail + " , " + e.hint
     }
     finally  {
-        await client.release()
+        client.release()
     } 
     return JSON.stringify(results.rows)
 }
@@ -156,7 +146,7 @@ module.exports.get_gruppen = get_gruppen
 
 async function get_spieler(gruppe){
     try {
-        await client.connect()
+        var client = await pool.connect()
     } catch(e) {
         return 'connection error : ' +  e.detail + " , " + e.hint
     }
@@ -166,11 +156,9 @@ async function get_spieler(gruppe){
     } catch(e) {
         return "Get Gruppen error : " + e.detail + " , " + e.hint
     }
-    try {
-        await client.end()
-    } catch (e){
-        return 'error during disconnection' + e.detail + " , " + e.hint
-    }
+    finally  {
+        client.release()
+    } 
     return JSON.stringify(results.rows)
 }
 module.exports.get_spieler = get_spieler
