@@ -18,7 +18,7 @@ app.use(basicAuth({
 }))
 */
 app.use(express.json())
-//app.use(cors())
+app.use(cors())
 
 app.post("/", function(req,res){
     db.insert_data(req.body)
