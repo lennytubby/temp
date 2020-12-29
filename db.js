@@ -128,7 +128,7 @@ async function insert_data(data) {
 //module.exports.insert_data = insert_data
 //module.exports.insert_data = insert_data
 
-function get_gruppen(){
+async function get_gruppen(){
     try {
         await client.connect()
     } catch(e) {
