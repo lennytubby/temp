@@ -125,5 +125,22 @@ async function insert_data(data) {
         return "Spiel " + results.rows[0].id + " gespeichert"
     }
 }
-module.exports.insert_data = insert_data
 //module.exports.insert_data = insert_data
+//module.exports.insert_data = insert_data
+
+function get_gruppen(){
+    try {
+        await client.connect()
+    } catch(e) {
+        return 'connection error : ' +  e.detail + " , " + e.hint
+    }
+    var query = "select name form gruppen;"
+    try {
+        var results = await client.query(query)
+    } catch(e) {
+        return "Get Gruppen error : " + e.detail + " , " + e.hint
+    }
+    console.log(results)
+    console.log(results.rows)
+}
+get_gruppen()

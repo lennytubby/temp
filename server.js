@@ -21,6 +21,10 @@ app.post("/", function(req,res){
         .then(str => res.end(str))
 })
 
+app.get("/gruppen", function(req,res){
+    db.get_gruppen(req.body)
+        .then(str => res.end(str))
+})
 
 app.listen(PORT); //,HOST
 
