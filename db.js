@@ -162,3 +162,22 @@ async function get_spieler(gruppe){
     return JSON.stringify(results.rows)
 }
 module.exports.get_spieler = get_spieler
+
+async function get_solos(gruppe){
+    try {
+        var client = await pool.connect()
+    } catch(e) {
+        return 'connection error : ' +  e.detail + " , " + e.hint
+    }
+    var query = "select name from solo;"
+    try {
+        var results = await client.query(query)
+    } catch(e) {
+        return "Get Gruppen error : " + e.detail + " , " + e.hint
+    }
+    finally  {
+        client.release()
+    } 
+    return JSON.stringify(results.rows)
+}
+module.exports.get_solos = get_solos

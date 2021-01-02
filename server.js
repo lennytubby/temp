@@ -30,6 +30,11 @@ app.get("/gruppen", function(req,res){
         .then(str => res.end(str))
 })
 
+app.get("/solos", function(req,res){
+    db.get_solos()
+        .then(str => res.end(str))
+})
+
 app.listen(PORT); //,HOST
 
 console.log(`Running`);
