@@ -152,7 +152,7 @@ async function insert_data(data) {
             return "update punkte error : " + e.detail + " , " + e.hint 
         }
         try {
-            var results = await client.query("select spieler, solo_countdown from gruppenmitglieder where spieler in (" + kontra_spieler1 + ", " + kontra_spieler2 + ", " + re_spieler1 + ", " + re_spieler2 +");")
+            var results = await client.query("select spieler, solo_countdown from gruppenmitglieder where spieler in (" + kontra_spieler1 + ", " + kontra_spieler2 + ", " + kontra_spieler3 + ", " + re_spieler1 + ", " + re_spieler2 +");")
         } catch(e) {
             return "get countdown error : " + e.detail + " , " + e.hint 
         }
@@ -205,7 +205,7 @@ async function get_spieler(gruppe){
 }
 module.exports.get_spieler = get_spieler
 
-async function get_solos(gruppe){
+async function get_solos(){
     try {
         var client = await pool.connect()
     } catch(e) {
