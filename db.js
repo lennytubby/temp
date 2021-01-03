@@ -135,11 +135,18 @@ async function insert_data(data) {
         }
         try {
             if (data.sieger == "Re"){
-                var r = await client.query("Update Spieler Set Punkte = Punkte + " + data.punkte + " where name in (" + re_spieler1 + ", " + re_spieler2 +");")
-                var r = await client.query("Update Spieler Set Punkte = Punkte - " + data.punkte + " where name in (" + kontra_spieler1 + ", " + kontra_spieler2 + ", " + kontra_spieler3 +");")
+                var sign = " + "
+                var n_sign = " - "
             } else {
-                var r = await client.query("Update Spieler Set Punkte = Punkte - " + data.punkte + " where name in (" + re_spieler1 + ", " + re_spieler2 +");")
-                var r = await client.query("Update Spieler Set Punkte = Punkte + " + data.punkte + " where name in (" + kontra_spieler1 + ", " + kontra_spieler2 + ", " + kontra_spieler3 +");")
+                var sign = " - "
+                var n_sign = " + "
+            }
+            if (data.re.solo) {
+                var r = await client.query("Update Spieler Set Punkte = Punkte" + sign + 3 * data.punkte + " where name in (" + re_spieler1 +");")
+                var r = await client.query("Update Spieler Set Punkte = Punkte" + n_sign + data.punkte + " where name in (" + kontra_spieler1 + ", " + kontra_spieler2 + ", " + kontra_spieler3 +");")
+            } else {
+                var r = await client.query("Update Spieler Set Punkte = Punkte" + sign + data.punkte + " where name in (" + re_spieler1 + ", " + re_spieler2 +");")
+                var r = await client.query("Update Spieler Set Punkte = Punkte" + n_sign + data.punkte + " where name in (" + kontra_spieler1 + ", " + kontra_spieler2 + ");")
             }
         } catch(e) {
             return "update punkte error : " + e.detail + " , " + e.hint 
