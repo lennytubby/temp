@@ -116,10 +116,45 @@ async function insert_data(data) {
         } catch(e) {
             return "Spiel INSERT error : " + e.detail + " , " + e.hint + "\nSpiel Query :\n" + spiel_query
         }
+        // Update Spieler
+        if (data.re.solo) {
+            var update_count = "Update Gruppenmitglieder set solo_countdown = solo_countdown - 1 where spieler in (" + kontra_spieler1 + ", " + kontra_spieler2 + ", " + kontra_spieler3 +");" + 
+                               "Update Gruppenmitglieder set solo_countdown = 30 where spieler = " + re_spieler1 + ";"
+        } else {
+            var update_count = "Update Gruppenmitglieder set solo_countdown = solo_countdown - 1 where spieler in (" + kontra_spieler1 + ", " + kontra_spieler2 + ", " + re_spieler1 + ", " + re_spieler2 +");"
+        }
+        try {
+            var r = await client.query(update_count)
+        } catch(e) {
+            return "update_count error : " + e.detail + " , " + e.hint 
+        }
+        try {
+            var r = await client.query("Update Spieler set spiele = spiele + 1 where name in (" + kontra_spieler1 + ", " + kontra_spieler2 + ", " + kontra_spieler3 + ", " + re_spieler1 + ", " + re_spieler2 +");")
+        } catch(e) {
+            return "update Spiele error : " + e.detail + " , " + e.hint 
+        }
+        try {
+            if (data.sieger == "Re"){
+                var r = await client.query("Update Spieler Set Punkte = Punkte + " + data.punkte + " where name in (" + re_spieler1 + ", " + re_spieler2 +");")
+                var r = await client.query("Update Spieler Set Punkte = Punkte - " + data.punkte + " where name in (" + kontra_spieler1 + ", " + kontra_spieler2 + ", " + kontra_spieler3 +");")
+            } else {
+                var r = await client.query("Update Spieler Set Punkte = Punkte - " + data.punkte + " where name in (" + re_spieler1 + ", " + re_spieler2 +");")
+                var r = await client.query("Update Spieler Set Punkte = Punkte + " + data.punkte + " where name in (" + kontra_spieler1 + ", " + kontra_spieler2 + ", " + kontra_spieler3 +");")
+            }
+        } catch(e) {
+            return "update punkte error : " + e.detail + " , " + e.hint 
+        }
+        try {
+            var results = await client.query("select spieler, solo_countdown from gruppenmitglieder where spieler in (" + kontra_spieler1 + ", " + kontra_spieler2 + ", " + re_spieler1 + ", " + re_spieler2 +");")
+        } catch(e) {
+            return "get countdown error : " + e.detail + " , " + e.hint 
+        }
+
+        //End
         finally  {
             client.release()
         } 
-        return "Spiel " + results.rows[0].id + " gespeichert"
+        return JSON.stringify(results.rows)
     }
 }
 module.exports.insert_data = insert_data
@@ -150,7 +185,7 @@ async function get_spieler(gruppe){
     } catch(e) {
         return 'connection error : ' +  e.detail + " , " + e.hint
     }
-    var query = "select name, bild from spieler, gruppenmitglieder gm where gruppe = " + gruppe + " and spieler.name = gm.spieler;"
+    var query = "select name, bild, solo_countdown from spieler s, gruppenmitglieder gm where gruppe = " + gruppe + " and s.name = gm.spieler;"
     try {
         var results = await client.query(query)
     } catch(e) {
@@ -181,3 +216,4 @@ async function get_solos(gruppe){
     return JSON.stringify(results.rows)
 }
 module.exports.get_solos = get_solos
+
