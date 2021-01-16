@@ -35,7 +35,7 @@ app.get("/solos", function(req,res){
         .then(str => res.end(str))
 })
 
-app.get("/spieler", function(req,res){
+app.post("/spieler", function(req,res){
     db.get_spieler(req.body.gruppe)
         .then(str => res.end(str))
 })
