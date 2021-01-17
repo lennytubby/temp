@@ -192,7 +192,7 @@ async function get_spieler(gruppe){
     } catch(e) {
         return 'connection error : ' +  e.detail + " , " + e.hint
     }
-    var query = "select name, encode(bild, 'base64'), solo_countdown from spieler s, gruppenmitglieder gm where gruppe = " + gruppe + " and s.name = gm.spieler;"
+    var query = "select name, encode(bild, 'base64') as bild, solo_countdown from spieler s, gruppenmitglieder gm where gruppe = " + gruppe + " and s.name = gm.spieler;"
     try {
         var results = await client.query(query)
     } catch(e) {
