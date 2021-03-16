@@ -21,21 +21,25 @@ app.use(express.json())
 app.use(cors())
 
 app.post("/", function(req,res){
+    res.set('Content-Type', 'application/json')
     db.insert_data(req.body)
         .then(str => res.end(str))
 })
 
 app.get("/gruppen", function(req,res){
+    res.set('Content-Type', 'application/json')
     db.get_gruppen()
         .then(str => res.end(str))
 })
 
 app.get("/solos", function(req,res){
+    res.set('Content-Type', 'application/json')
     db.get_solos()
         .then(str => res.end(str))
 })
 
 app.post("/spieler", function(req,res){
+    res.set('Content-Type', 'application/json')
     db.get_spieler(req.body.gruppe)
         .then(str => res.end(str))
 })
