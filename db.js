@@ -192,7 +192,10 @@ async function get_spieler(gruppe){
     } catch(e) {
         return 'connection error : ' +  e.detail + " , " + e.hint
     }
-    var query = "select name, bild as bild, solo_countdown from spieler s, gruppenmitglieder gm where gruppe = " + gruppe + " and s.name = gm.spieler;"
+    var query_sum= "select (SUM(s.punkte) from spiel s, kontra, re sRe where s.kontra = kontra.id and s.re = sRe.id and s.sieger = (select case when exists (select * from Re where 'Lenny' = spieler1 or 'Lenny' = spieler2 and id=sRe.id) then 'Re' else 'Kontra' end)) - " + 
+                    "(SUM(s.punkte) from spiel s, kontra, re sRe where s.kontra = kontra.id and s.re = sRe.id and s.sieger != (select case when exists (select * from Re where 'Lenny' = spieler1 or 'Lenny' = spieler2 and id=sRe.id) then 'Re' else 'Kontra' end))" +
+                    "where s.id in (select id from spiel where datum between current_timestamp and current_timestamp - interval '1 DAY');"
+    var query = "select name, punkte, bild as bild, solo_countdown from spieler s, gruppenmitglieder gm where gruppe = " + gruppe + " and s.name = gm.spieler;"
     try {
         var results = await client.query(query)
     } catch(e) {
