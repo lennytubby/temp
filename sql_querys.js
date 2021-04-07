@@ -1,5 +1,6 @@
 module.exports = {
-    getSpieler: `
+    getSpieler:`select name from spieler;`,
+    getSpieler1: `
     WITH byDate as (
         select spiel.id 
         from spiel 
