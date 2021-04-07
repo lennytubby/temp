@@ -201,12 +201,6 @@ async function get_spieler(gruppe){
     } catch(e) {
         return "Get Gruppen error : " + e.detail + " , " + e.hint
     }
-    var query = ""
-    try {
-        var results = await client.query(query)
-    } catch(e) {
-        return "Get Gruppen error : " + e.detail + " , " + e.hint
-    }
     finally  {
         client.release()
     } 
