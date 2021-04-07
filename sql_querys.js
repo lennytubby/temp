@@ -1,6 +1,6 @@
 module.exports = {
-    getSpieler:`select name from spieler;`,
-    getSpieler1: function(gruppe){
+    test:`select name from spieler;`,
+    getSpieler: function(gruppe){
     return `WITH byDate as (
         select spiel.id 
         from spiel 
