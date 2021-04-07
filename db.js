@@ -145,17 +145,17 @@ async function insert_data(data) {
                 var n_sign = " + "
             }
             if (data.re.solo) {
-                var r = await client.query("Update Spieler Set Punkte = Punkte" + sign + 3 * data.punkte + " where name in (" + re_spieler1 +");")
-                var r = await client.query("Update Spieler Set Punkte = Punkte" + n_sign + data.punkte + " where name in (" + kontra_spieler1 + ", " + kontra_spieler2 + ", " + kontra_spieler3 +");")
+                var r = await client.query("Update Gruppenmitglieder Set Punkte = Punkte" + sign + 3 * data.punkte + " where spieler in (" + re_spieler1 +") and Gruppe = " + data.gruppe + ";")
+                var r = await client.query("Update Gruppenmitglieder Set Punkte = Punkte" + n_sign + data.punkte + " where spieler in (" + kontra_spieler1 + ", " + kontra_spieler2 + ", " + kontra_spieler3 +") and Gruppe = " + data.gruppe + ";")
             } else {
-                var r = await client.query("Update Spieler Set Punkte = Punkte" + sign + data.punkte + " where name in (" + re_spieler1 + ", " + re_spieler2 +");")
-                var r = await client.query("Update Spieler Set Punkte = Punkte" + n_sign + data.punkte + " where name in (" + kontra_spieler1 + ", " + kontra_spieler2 + ");")
+                var r = await client.query("Update Gruppenmitglieder Set Punkte = Punkte" + sign + data.punkte + " where spieler in (" + re_spieler1 + ", " + re_spieler2 +") and Gruppe = " + data.gruppe + ";")
+                var r = await client.query("Update Gruppenmitglieder Set Punkte = Punkte" + n_sign + data.punkte + " where spieler in (" + kontra_spieler1 + ", " + kontra_spieler2 + ") and Gruppe = " + data.gruppe + ";")
             }
         } catch(e) {
             return "update punkte error : " + e.detail + " , " + e.hint 
         }
         try {
-            var results = await client.query("select spieler, solo_countdown from gruppenmitglieder where spieler in (" + kontra_spieler1 + ", " + kontra_spieler2 + ", " + kontra_spieler3 + ", " + re_spieler1 + ", " + re_spieler2 +");")
+            var results = await client.query(querys.insertResponse(kontra_spieler1, kontra_spieler2, kontra_spieler3, re_spieler1, re_spieler2, data.gruppe))
         } catch(e) {
             return "get countdown error : " + e.detail + " , " + e.hint 
         }
