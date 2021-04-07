@@ -61,7 +61,7 @@ module.exports = {
     
     select today, gT.name, punkte, solo_countdown, bild
     from getToday gT, spieler s, gruppenmitglieder gm
-    where gruppe = 1 
+    where gruppe = ` + gruppe + ` 
     and s.name = gm.spieler
     and s.name = gT.name;`
     }
