@@ -197,8 +197,7 @@ async function get_spieler(gruppe){
     }
     //var query = "select name, punkte, bild as bild, solo_countdown from spieler s, gruppenmitglieder gm where gruppe = " + gruppe + " and s.name = gm.spieler;"
     try {
-        console.log(querys.getSpieler)
-        var results = await client.query(querys.getSpieler)
+        var results = await client.query(querys.getSpieler(gruppe))
     } catch(e) {
         return "Get Gruppen error : " + e.detail + " , " + e.hint
     }

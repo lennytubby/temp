@@ -1,7 +1,7 @@
 module.exports = {
     getSpieler:`select name from spieler;`,
-    getSpieler1: `
-    WITH byDate as (
+    getSpieler1: function(gruppe){
+    return `WITH byDate as (
         select spiel.id 
         from spiel 
         where datum between date '2021-04-06' - interval '6 hours' and date '2021-04-06'
@@ -63,5 +63,6 @@ module.exports = {
     from getToday gT, spieler s, gruppenmitglieder gm
     where gruppe = 1 
     and s.name = gm.spieler
-    and s.name = gT.name;`  
+    and s.name = gT.name;`
+    }
 }
