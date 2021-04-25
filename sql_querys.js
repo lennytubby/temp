@@ -287,7 +287,7 @@ module.exports = {
     },
     update_spieler: function(gruppe) {
         return today + total + `
-            select today.punkte as today, total.punkte as total from total, today where total.spieler = today.spieler`
+            select today.punkte as today, total.punkte as total from total, today where total.spieler = today.spieler;`
 
 
     }
