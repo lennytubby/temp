@@ -254,6 +254,6 @@ async function delete_last() {
     } finally {
         client.release()
     }
-    return JSON.stringify(results.rows)
+    return "success"
 }
 module.exports.delete_last = delete_last
