@@ -237,7 +237,7 @@ async function delete_spiel(ID) {
     } finally {
         client.release()
     }
-    return JSON.stringify(results.rows)
+    return "success"
 }
 module.exports.delete_spiel = delete_spiel
 
@@ -257,3 +257,20 @@ async function delete_last() {
     return "success"
 }
 module.exports.delete_last = delete_last
+
+async function update_spieler() {
+    try {
+        var client = await pool.connect()
+    } catch (e) {
+        return 'connection error : ' + e.detail + " , " + e.hint
+    }
+    try {
+        var results = await client.query(querys.update_spieler(1))
+    } catch (e) {
+        return "Delete error : " + e.detail + " , " + e.hint
+    } finally {
+        client.release()
+    }
+    return JSON.stringify(results.rows)
+}
+module.exports.update_spieler = update_spieler
