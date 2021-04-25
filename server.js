@@ -44,6 +44,12 @@ app.post("/spieler", function(req,res){
         .then(str => res.end(str))
 })
 
+app.post("/delete", function(req,res){
+    res.set('Content-Type', 'application/json')
+    db.delete_spiel(req.body.id)
+        .then(str => res.end(str))
+})
+
 app.listen(PORT); //,HOST
 
 console.log(`Running`);

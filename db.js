@@ -227,3 +227,22 @@ async function get_solos(){
 }
 module.exports.get_solos = get_solos
 
+async function delete_spiel(ID){
+    try {
+        var client = await pool.connect()
+    } catch(e) {
+        return 'connection error : ' +  e.detail + " , " + e.hint
+    }
+    var query = "delete from spiel where id = " + ID + ";"
+    try {
+        var results = await client.query(query)
+    } catch(e) {
+        return "Delete error : " + e.detail + " , " + e.hint
+    }
+    finally  {
+        client.release()
+    } 
+    return JSON.stringify(results.rows)
+}
+module.exports.delete_spiel = delete_spiel
+
