@@ -56,7 +56,7 @@ app.post("/deletelast", function(req, res) {
         .then(str => res.end(str))
 })
 
-app.post("/deletelast", function(req, res) {
+app.post("/updatespieler", function(req, res) {
     res.set('Content-Type', 'application/json')
     db.update_spieler()
         .then(str => res.end(str))
