@@ -111,12 +111,12 @@ Minus_KontraT as (
 ),
 SummandenT as (
     select 
-        coalesce(PRS.punkte, 0) as Plus_Re_Solo, 
-        coalesce(PR.punkte, 0) as Plus_Re, 
-        coalesce(MRS.punkte, 0) as Minus_Re_Solo, 
-        coalesce(MR.punkte, 0) as Minus_Re,
-        coalesce(PK.punkte, 0) as Plus_Kontra, 
-        coalesce(MK.punkte, 0) as Minus_Kontra,  
+        coalesce(PRS.punkte, 0) as Plus_Re_SoloT, 
+        coalesce(PR.punkte, 0) as Plus_ReT, 
+        coalesce(MRS.punkte, 0) as Minus_Re_SoloT, 
+        coalesce(MR.punkte, 0) as Minus_ReT,
+        coalesce(PK.punkte, 0) as Plus_KontraT, 
+        coalesce(MK.punkte, 0) as Minus_KontraT,  
         gm.spieler
     from 
         gruppenmitglieder gm
