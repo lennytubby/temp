@@ -1,0 +1,4 @@
+To auto authenticate for pg_dump in backup.sh create the file:
+~/.pgpass mit dem in halt: localhost:5432:doppelkopf:postgres:SbotmtWigrm.1 
+mache chmod 600 ~/.pgpass
+

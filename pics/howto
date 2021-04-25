@@ -1,0 +1,2 @@
+just use update/insert with postgres:
+update spieler set bild=bytea('~/projects/doppelkopf/pics/Lenny.png') where name='Lenny';

@@ -1,0 +1,5 @@
+#!/bin/bash
+bild=$( base64 $1 )
+echo $bild
+PGPASSWORD=SbotmtWigrm.1 psql -U postgres -d doppelkopf -c "update spieler set bild='$bild' where name='$2';"
+
