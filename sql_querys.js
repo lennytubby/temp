@@ -56,8 +56,8 @@ from
 where y.name = x.name 
 )`
 
-var total = `
-,Plus_Re_SoloT as (
+var total = `, 
+Plus_Re_SoloT as (
     select SUM(s.punkte*3) as punkte, sp.name
     from spiel s, re sRe, spieler sp
     where s.re = sRe.id 
@@ -287,7 +287,7 @@ module.exports = {
     },
     update_spieler: function(gruppe) {
         return today + total + `
-            select today.punkte as today, total.punkte as total from total, today where total.spieler = today.spieler;`
+            select today.today as today, total.total as total from total, today where total.spieler = today.spieler;`
 
 
     }
