@@ -1,7 +1,7 @@
 var querys = require('./sql_querys.js')
 
 const { Pool } = require('pg')
-const pool  = new Pool({
+const pool = new Pool({
     user: "postgres",
     password: "SbotmtWigrm.1",
     host: "127.0.0.1",
@@ -43,21 +43,21 @@ async function insert_data(data) {
     // Connect
     try {
         var client = await pool.connect()
-    } catch(e) {
-        return 'connection error : ' +  e.detail + " , " + e.hint
+    } catch (e) {
+        return 'connection error : ' + e.detail + " , " + e.hint
     }
 
     if (data.fehlspiel) {
         var spiel_query = "INSERT INTO Spiel (Gruppe, Punkte, Fehlspiel) VALUES (" + data.gruppe + ", " +
-        12 + ", " + data.Spielfehler + ") RETURNING id;"
+            12 + ", " + data.Spielfehler + ") RETURNING id;"
         try {
             var results = await client.query(spiel_query)
-        } catch(e) {
+        } catch (e) {
             return "Spiel INSERT error : " + e.detail + " , " + e.hint + "\nSpiel Query :\n" + spiel_query
         }
         return results.rows[0].id
     } else {
-        
+
         //RE
         if (data.re.solo) {
             var re_solo = "\'" + data.re.solo + "\'"
@@ -78,7 +78,7 @@ async function insert_data(data) {
             "VALUES (" + re_solo + ", " + re_spieler1 + ", " + re_spieler2 + ", " + data.re.punkte + ", " + data.re.ansage + ", " + data.re.absage + ", " + data.re.fuchs + ", " + data.re.doppelkopf + ", " + data.re.karlchen + ") RETURNING id;"
         try {
             var results = await client.query(re_query)
-        } catch(e) {
+        } catch (e) {
             return "Spiel INSERT error : " + e.detail + " , " + e.hint + "\nRe Query :\n" + re_query
         }
         var re_id = results.rows[0].id
@@ -103,41 +103,41 @@ async function insert_data(data) {
             "VALUES (" + kontra_spieler1 + ", " + kontra_spieler2 + ", " + kontra_spieler3 + ", " + data.kontra.punkte + ", " + data.kontra.ansage + ", " + data.kontra.absage + ", " + data.kontra.fuchs + ", " + data.kontra.doppelkopf + ", " + data.kontra.karlchen + ") RETURNING id;"
         try {
             var results = await client.query(kontra_query)
-        } catch(e) {
+        } catch (e) {
             return "Kontra INSERT error : " + e.detail + " , " + e.hint + "\nKontra Query :\n" + kontra_querysp
         }
         var kontra_id = results.rows[0].id
 
         // Spiel
-       if (!(data.sieger == "Re" || data.sieger == "Kontra")){
+        if (!(data.sieger == "Re" || data.sieger == "Kontra")) {
             return "Sieger nicht eindeutig"
         }
         var spiel_query = "INSERT INTO Spiel (Gruppe, Re, Kontra, Punkte, Sieger) VALUES (" + data.gruppe + ", " +
-        re_id + ", " + kontra_id + ", " + data.punkte + ", \'" + data.sieger + "\') RETURNING id;"
+            re_id + ", " + kontra_id + ", " + data.punkte + ", \'" + data.sieger + "\') RETURNING id;"
         try {
             var results = await client.query(spiel_query)
-        } catch(e) {
+        } catch (e) {
             return "Spiel INSERT error : " + e.detail + " , " + e.hint + "\nSpiel Query :\n" + spiel_query
         }
         // Update Spieler
         if (data.re.solo) {
-            var update_count = "Update Gruppenmitglieder set solo_countdown = solo_countdown - 1 where spieler in (" + kontra_spieler1 + ", " + kontra_spieler2 + ", " + kontra_spieler3 +");" + 
-                               "Update Gruppenmitglieder set solo_countdown = 30 where spieler = " + re_spieler1 + ";"
+            var update_count = "Update Gruppenmitglieder set solo_countdown = solo_countdown - 1 where spieler in (" + kontra_spieler1 + ", " + kontra_spieler2 + ", " + kontra_spieler3 + ");" +
+                "Update Gruppenmitglieder set solo_countdown = 30 where spieler = " + re_spieler1 + ";"
         } else {
-            var update_count = "Update Gruppenmitglieder set solo_countdown = solo_countdown - 1 where spieler in (" + kontra_spieler1 + ", " + kontra_spieler2 + ", " + re_spieler1 + ", " + re_spieler2 +");"
+            var update_count = "Update Gruppenmitglieder set solo_countdown = solo_countdown - 1 where spieler in (" + kontra_spieler1 + ", " + kontra_spieler2 + ", " + re_spieler1 + ", " + re_spieler2 + ");"
         }
         try {
             var r = await client.query(update_count)
-        } catch(e) {
-            return "update_count error : " + e.detail + " , " + e.hint 
+        } catch (e) {
+            return "update_count error : " + e.detail + " , " + e.hint
         }
         try {
-            var r = await client.query("Update Spieler set spiele = spiele + 1 where name in (" + kontra_spieler1 + ", " + kontra_spieler2 + ", " + kontra_spieler3 + ", " + re_spieler1 + ", " + re_spieler2 +");")
-        } catch(e) {
-            return "update Spiele error : " + e.detail + " , " + e.hint 
+            var r = await client.query("Update Spieler set spiele = spiele + 1 where name in (" + kontra_spieler1 + ", " + kontra_spieler2 + ", " + kontra_spieler3 + ", " + re_spieler1 + ", " + re_spieler2 + ");")
+        } catch (e) {
+            return "update Spiele error : " + e.detail + " , " + e.hint
         }
         try {
-            if (data.sieger == "Re"){
+            if (data.sieger == "Re") {
                 var sign = " + "
                 var n_sign = " - "
             } else {
@@ -145,122 +145,115 @@ async function insert_data(data) {
                 var n_sign = " + "
             }
             if (data.re.solo) {
-                var r = await client.query("Update Gruppenmitglieder Set Punkte = Punkte" + sign + 3 * data.punkte + " where spieler in (" + re_spieler1 +") and Gruppe = " + data.gruppe + ";")
-                var r = await client.query("Update Gruppenmitglieder Set Punkte = Punkte" + n_sign + data.punkte + " where spieler in (" + kontra_spieler1 + ", " + kontra_spieler2 + ", " + kontra_spieler3 +") and Gruppe = " + data.gruppe + ";")
+                var r = await client.query("Update Gruppenmitglieder Set Punkte = Punkte" + sign + 3 * data.punkte + " where spieler in (" + re_spieler1 + ") and Gruppe = " + data.gruppe + ";")
+                var r = await client.query("Update Gruppenmitglieder Set Punkte = Punkte" + n_sign + data.punkte + " where spieler in (" + kontra_spieler1 + ", " + kontra_spieler2 + ", " + kontra_spieler3 + ") and Gruppe = " + data.gruppe + ";")
             } else {
-                var r = await client.query("Update Gruppenmitglieder Set Punkte = Punkte" + sign + data.punkte + " where spieler in (" + re_spieler1 + ", " + re_spieler2 +") and Gruppe = " + data.gruppe + ";")
+                var r = await client.query("Update Gruppenmitglieder Set Punkte = Punkte" + sign + data.punkte + " where spieler in (" + re_spieler1 + ", " + re_spieler2 + ") and Gruppe = " + data.gruppe + ";")
                 var r = await client.query("Update Gruppenmitglieder Set Punkte = Punkte" + n_sign + data.punkte + " where spieler in (" + kontra_spieler1 + ", " + kontra_spieler2 + ") and Gruppe = " + data.gruppe + ";")
             }
-        } catch(e) {
-            return "update punkte error : " + e.detail + " , " + e.hint 
+        } catch (e) {
+            return "update punkte error : " + e.detail + " , " + e.hint
         }
         try {
             var results = await client.query(querys.insertResponse(kontra_spieler1, kontra_spieler2, kontra_spieler3, re_spieler1, re_spieler2, data.gruppe))
-        } catch(e) {
-            return "get countdown error : " + e.detail + " , " + e.hint 
+        } catch (e) {
+            return "get countdown error : " + e.detail + " , " + e.hint
         }
 
         //End
-        finally  {
+        finally {
             client.release()
-        } 
+        }
         return JSON.stringify(results.rows)
     }
 }
 module.exports.insert_data = insert_data
 
-async function get_gruppen(){
+async function get_gruppen() {
     try {
         var client = await pool.connect()
-    } catch(e) {
-        return 'connection error : ' +  e.detail + " , " + e.hint + ", " + JSON.stringify(e)
+    } catch (e) {
+        return 'connection error : ' + e.detail + " , " + e.hint + ", " + JSON.stringify(e)
     }
     var query = "select name, id, spiele from gruppe;"
     try {
         var results = await client.query(query)
-    } catch(e) {
+    } catch (e) {
         return JSON.stringify(e)
-        //return "Get Gruppen error : " + e.detail + " , " + e.hint
-    }
-    finally  {
+            //return "Get Gruppen error : " + e.detail + " , " + e.hint
+    } finally {
         client.release()
-    } 
+    }
     return JSON.stringify(results.rows)
 }
 module.exports.get_gruppen = get_gruppen
 
-async function get_spieler(gruppe){
+async function get_spieler(gruppe) {
     try {
         var client = await pool.connect()
-    } catch(e) {
-        return 'connection error : ' +  e.detail + " , " + e.hint
+    } catch (e) {
+        return 'connection error : ' + e.detail + " , " + e.hint
     }
     //var query = "select name, punkte, bild as bild, solo_countdown from spieler s, gruppenmitglieder gm where gruppe = " + gruppe + " and s.name = gm.spieler;"
     try {
         var results = await client.query(querys.getSpieler(gruppe))
-    } catch(e) {
+    } catch (e) {
         return "Get Gruppen error : " + e.detail + " , " + e.hint
-    }
-    finally  {
+    } finally {
         client.release()
-    } 
+    }
     return JSON.stringify(results.rows)
 }
 module.exports.get_spieler = get_spieler
 
-async function get_solos(){
+async function get_solos() {
     try {
         var client = await pool.connect()
-    } catch(e) {
-        return 'connection error : ' +  e.detail + " , " + e.hint
+    } catch (e) {
+        return 'connection error : ' + e.detail + " , " + e.hint
     }
     var query = "select name from solo;"
     try {
         var results = await client.query(query)
-    } catch(e) {
+    } catch (e) {
         return "Get Gruppen error : " + e.detail + " , " + e.hint
-    }
-    finally  {
+    } finally {
         client.release()
-    } 
+    }
     return JSON.stringify(results.rows)
 }
 module.exports.get_solos = get_solos
 
-async function delete_spiel(ID){
+async function delete_spiel(ID) {
     try {
         var client = await pool.connect()
-    } catch(e) {
-        return 'connection error : ' +  e.detail + " , " + e.hint
+    } catch (e) {
+        return 'connection error : ' + e.detail + " , " + e.hint
     }
     try {
         var results = await client.query(querys.delete_spiel(ID))
-    } catch(e) {
+    } catch (e) {
         return "Delete error : " + e.detail + " , " + e.hint
-    }
-    finally  {
+    } finally {
         client.release()
-    } 
+    }
     return JSON.stringify(results.rows)
 }
 module.exports.delete_spiel = delete_spiel
 
-async function delete_last(){
+async function delete_last() {
     try {
         var client = await pool.connect()
-    } catch(e) {
-        return 'connection error : ' +  e.detail + " , " + e.hint
+    } catch (e) {
+        return 'connection error : ' + e.detail + " , " + e.hint
     }
     try {
-        var results = await client.query(querys.delete_last())
-    } catch(e) {
+        var results = await client.query(querys.delete_last)
+    } catch (e) {
         return "Delete error : " + e.detail + " , " + e.hint
-    }
-    finally  {
+    } finally {
         client.release()
-    } 
+    }
     return JSON.stringify(results.rows)
 }
 module.exports.delete_last = delete_last
-
-
