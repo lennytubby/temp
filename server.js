@@ -50,6 +50,12 @@ app.post("/delete", function(req,res){
         .then(str => res.end(str))
 })
 
+app.post("/deletelast", function(req,res){
+    res.set('Content-Type', 'application/json')
+    db.delete_last()
+        .then(str => res.end(str))
+})
+
 app.listen(PORT); //,HOST
 
 console.log(`Running`);

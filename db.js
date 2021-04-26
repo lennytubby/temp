@@ -233,9 +233,8 @@ async function delete_spiel(ID){
     } catch(e) {
         return 'connection error : ' +  e.detail + " , " + e.hint
     }
-    var query = "delete from spiel where id = " + ID + ";"
     try {
-        var results = await client.query(query)
+        var results = await client.query(querys.delete_spiel(ID))
     } catch(e) {
         return "Delete error : " + e.detail + " , " + e.hint
     }
@@ -245,4 +244,23 @@ async function delete_spiel(ID){
     return JSON.stringify(results.rows)
 }
 module.exports.delete_spiel = delete_spiel
+
+async function delete_last(){
+    try {
+        var client = await pool.connect()
+    } catch(e) {
+        return 'connection error : ' +  e.detail + " , " + e.hint
+    }
+    try {
+        var results = await client.query(querys.delete_last())
+    } catch(e) {
+        return "Delete error : " + e.detail + " , " + e.hint
+    }
+    finally  {
+        client.release()
+    } 
+    return JSON.stringify(results.rows)
+}
+module.exports.delete_last = delete_last
+
 
