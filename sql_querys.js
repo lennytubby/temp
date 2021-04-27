@@ -171,11 +171,6 @@ function today(gruppe, first) {
     if (first) result = result + "With "
     else result = result + ", "
     result = result + `
-    byDate as (
-        select spiel.id 
-        from spiel 
-        where datum between current_timestamp - interval '24 hours' and current_timestamp
-    ), 
     Plus_Re_Solo as (
         select SUM(s.punkte*3) as punkte, sp.name
         from spiel s, re sRe, spieler sp
@@ -277,6 +272,7 @@ function today(gruppe, first) {
 function solo_countdown(gruppe, first) {
     var result = ""
     if (first) result = result + "With "
+    else result = result + ", "
     result = result + `
     Solo_Countdown as (
         Select 30 - count(*) as num , gm.spieler

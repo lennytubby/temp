@@ -154,6 +154,7 @@ async function get_gruppen() {
 module.exports.get_gruppen = get_gruppen
 
 async function get_spieler(gruppe) {
+    if (!(typeof gruppe === "number" || typeof gruppe === "number")) return "bitte eine gruppe angeben"
     try {
         var client = await pool.connect()
     } catch (e) {
@@ -190,6 +191,7 @@ async function get_solos() {
 module.exports.get_solos = get_solos
 
 async function delete_spiel(ID) {
+    if (!(typeof gruppe === "number" || typeof gruppe === "number")) return "bitte eine spiel id angeben"
     try {
         var client = await pool.connect()
     } catch (e) {
@@ -224,6 +226,8 @@ async function delete_last() {
 module.exports.delete_last = delete_last
 
 async function highlevelstats(gruppe) {
+    return console.log(querys.highlevelstats(gruppe))
+    if (!(typeof gruppe === "number" || typeof gruppe === "number")) return "bitte eine gruppe angeben"
     try {
         var client = await pool.connect()
     } catch (e) {
@@ -232,7 +236,7 @@ async function highlevelstats(gruppe) {
     try {
         var results = await client.query(querys.highlevelstats(gruppe))
     } catch (e) {
-        return "Delete error : " + e.detail + " , " + e.hint
+        return "High level stats error : " + e.detail + " , " + e.hint
     } finally {
         client.release()
     }

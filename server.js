@@ -65,6 +65,7 @@ app.post("/highlevelstats", function(req, res) {
 app.listen(PORT); //,HOST
 
 console.log(`Running`);
+console.log(db.highlevelstats(1))
 
 /* cant figure out
  *
