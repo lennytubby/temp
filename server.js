@@ -56,9 +56,9 @@ app.post("/deletelast", function(req, res) {
         .then(str => res.end(str))
 })
 
-app.post("/updatespieler", function(req, res) {
+app.post("/highlevelstats", function(req, res) {
     res.set('Content-Type', 'application/json')
-    db.update_spieler()
+    db.highlevelstats(req.body.gruppe)
         .then(str => res.end(str))
 })
 

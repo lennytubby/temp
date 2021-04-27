@@ -56,198 +56,247 @@ from
 where y.name = x.name 
 )`
 
-var total = `, 
-Plus_Re_SoloT as (
-    select SUM(s.punkte*3) as punkte, sp.name
-    from spiel s, re sRe, spieler sp
-    where s.re = sRe.id 
-    and sRe.solo is not null
-    and s.sieger =  'Re'
-    and (sp.name = sRe.spieler1 or sp.name = sRe.spieler2)
-    group by sp.name
-), 
-Plus_ReT as (
-    select SUM(s.punkte) as punkte, sp.name
-    from spiel s, re sRe, spieler sp
-    where s.re = sRe.id 
-    and sRe.Solo is null
-    and s.sieger =  'Re'
-    and (sp.name = sRe.spieler1 or sp.name = sRe.spieler2)
-    group by sp.name
-), 
-Minus_Re_SoloT as (
-    select SUM(s.punkte*3) as punkte, sp.name
-    from spiel s, re sRe, spieler sp
-    where s.re = sRe.id 
-    and sRe.Solo is not null
-    and s.sieger =  'Kontra'
-    and (sp.name = sRe.spieler1 or sp.name = sRe.spieler2)
-    group by sp.name
-), 
-Minus_ReT as (
-    select SUM(s.punkte) as punkte, sp.name
-    from spiel s, re sRe, spieler sp
-    where s.re = sRe.id 
-    and sRe.Solo is null
-    and s.sieger =  'Kontra'
-    and (sp.name = sRe.spieler1 or sp.name = sRe.spieler2)
-    group by sp.name
-), 
-Plus_KontraT as (
-    select SUM(s.punkte) as punkte, sp.name
-    from spiel s, kontra, spieler sp
-    where s.kontra = kontra.id 
-    and s.sieger =  'Kontra'
-    and (sp.name = kontra.spieler1 or sp.name = kontra.spieler2 or sp.name = kontra.spieler3)
-    group by sp.name
-), 
-Minus_KontraT as (
-    select SUM(s.punkte) as punkte, sp.name
-    from spiel s, kontra, spieler sp
-    where s.kontra = kontra.id 
-    and s.sieger =  'Re'
-    and (sp.name = kontra.spieler1 or sp.name = kontra.spieler2 or sp.name = kontra.spieler3)
-    group by sp.name
-),
-SummandenT as (
-    select 
-        coalesce(PRS.punkte, 0) as Plus_Re_SoloT, 
-        coalesce(PR.punkte, 0) as Plus_ReT, 
-        coalesce(MRS.punkte, 0) as Minus_Re_SoloT, 
-        coalesce(MR.punkte, 0) as Minus_ReT,
-        coalesce(PK.punkte, 0) as Plus_KontraT, 
-        coalesce(MK.punkte, 0) as Minus_KontraT,  
-        gm.spieler
-    from 
-        gruppenmitglieder gm
-        full join 
-        Plus_Re_SoloT PRS 
-        on gm.spieler = PRS.name
-        full join 
-        Plus_ReT PR
-        on gm.spieler = PR.name
-        full join
-        Minus_Re_SoloT MRS
-        on gm.spieler = MRS.name
-        full join
-        Minus_ReT MR
-        on gm.spieler = MR.name
-        full join
-        Plus_KontraT PK
-        on gm.spieler = PK.name
-        full join
-        Minus_KontraT MK
-        on gm.spieler = MK.name
-        
-    where 
-        gruppe = 1
-),
-total as (
-    select S.Plus_Re_SoloT + S.Plus_ReT + S.Plus_KontraT - S.Minus_Re_SoloT - S.Minus_ReT  - S.Minus_KontraT as total, S.spieler
-    from SummandenT S
-)`
+function byDate(gruppe, first) {
+    var result = ""
+    if (first) result = result + "With "
+    else result = result + ", "
+    result = result + `
+    byDate as (
+        select spiel.id 
+        from spiel 
+        where datum between current_timestamp - interval '12 hours' and current_timestamp
+    )`
+    return result
+}
 
-var today = `
-WITH byDate as (
-    select spiel.id 
-    from spiel 
-    where datum between current_timestamp - interval '24 hours' and current_timestamp
-), 
-Plus_Re_Solo as (
-    select SUM(s.punkte*3) as punkte, sp.name
-    from spiel s, re sRe, spieler sp
-    where s.re = sRe.id 
-    and s.id in (select * from byDate)
-    and sRe.solo is not null
-    and s.sieger =  'Re'
-    and (sp.name = sRe.spieler1 or sp.name = sRe.spieler2)
-    group by sp.name
-), 
-Plus_Re as (
-    select SUM(s.punkte) as punkte, sp.name
-    from spiel s, re sRe, spieler sp
-    where s.re = sRe.id 
-    and s.id in (select * from byDate)
-    and sRe.Solo is null
-    and s.sieger =  'Re'
-    and (sp.name = sRe.spieler1 or sp.name = sRe.spieler2)
-    group by sp.name
-), 
-Minus_Re_Solo as (
-    select SUM(s.punkte*3) as punkte, sp.name
-    from spiel s, re sRe, spieler sp
-    where s.re = sRe.id 
-    and s.id in (select * from byDate)
-    and sRe.Solo is not null
-    and s.sieger =  'Kontra'
-    and (sp.name = sRe.spieler1 or sp.name = sRe.spieler2)
-    group by sp.name
-), 
-Minus_Re as (
-    select SUM(s.punkte) as punkte, sp.name
-    from spiel s, re sRe, spieler sp
-    where s.re = sRe.id 
-    and s.id in (select * from byDate)
-    and sRe.Solo is null
-    and s.sieger =  'Kontra'
-    and (sp.name = sRe.spieler1 or sp.name = sRe.spieler2)
-    group by sp.name
-), 
-Plus_Kontra as (
-    select SUM(s.punkte) as punkte, sp.name
-    from spiel s, kontra, spieler sp
-    where s.kontra = kontra.id 
-    and s.id in (select * from byDate)
-    and s.sieger =  'Kontra'
-    and (sp.name = kontra.spieler1 or sp.name = kontra.spieler2 or sp.name = kontra.spieler3)
-    group by sp.name
-), 
-Minus_Kontra as (
-    select SUM(s.punkte) as punkte, sp.name
-    from spiel s, kontra, spieler sp
-    where s.kontra = kontra.id 
-    and s.id in (select * from byDate)
-    and s.sieger =  'Re'
-    and (sp.name = kontra.spieler1 or sp.name = kontra.spieler2 or sp.name = kontra.spieler3)
-    group by sp.name
-),
-Summanden as (
-    select 
-        coalesce(PRS.punkte, 0) as Plus_Re_Solo, 
-        coalesce(PR.punkte, 0) as Plus_Re, 
-        coalesce(MRS.punkte, 0) as Minus_Re_Solo, 
-        coalesce(MR.punkte, 0) as Minus_Re,
-        coalesce(PK.punkte, 0) as Plus_Kontra, 
-        coalesce(MK.punkte, 0) as Minus_Kontra,  
-        gm.spieler
-    from 
-        gruppenmitglieder gm
-        full join 
-        Plus_Re_Solo PRS 
-        on gm.spieler = PRS.name
-        full join 
-        Plus_Re PR
-        on gm.spieler = PR.name
-        full join
-        Minus_Re_Solo MRS
-        on gm.spieler = MRS.name
-        full join
-        Minus_Re MR
-        on gm.spieler = MR.name
-        full join
-        Plus_Kontra PK
-        on gm.spieler = PK.name
-        full join
-        Minus_Kontra MK
-        on gm.spieler = MK.name
-        
-    where 
-        gruppe = 1
-),
-today as (
-    select S.Plus_Re_Solo + S.Plus_Re + S.Plus_Kontra - S.Minus_Re_Solo - S.Minus_Re  - S.Minus_Kontra as today, S.spieler
-    from Summanden S
-)`
+function total(gruppe, first) {
+    var result = ""
+    if (first) result = result + "With "
+    else result = result + ", "
+    result = result + ` 
+    Plus_Re_SoloT as (
+        select SUM(s.punkte*3) as punkte, sp.name
+        from spiel s, re sRe, spieler sp
+        where s.re = sRe.id 
+        and sRe.solo is not null
+        and s.sieger =  'Re'
+        and (sp.name = sRe.spieler1 or sp.name = sRe.spieler2)
+        group by sp.name
+    ), 
+    Plus_ReT as (
+        select SUM(s.punkte) as punkte, sp.name
+        from spiel s, re sRe, spieler sp
+        where s.re = sRe.id 
+        and sRe.Solo is null
+        and s.sieger =  'Re'
+        and (sp.name = sRe.spieler1 or sp.name = sRe.spieler2)
+        group by sp.name
+    ), 
+    Minus_Re_SoloT as (
+        select SUM(s.punkte*3) as punkte, sp.name
+        from spiel s, re sRe, spieler sp
+        where s.re = sRe.id 
+        and sRe.Solo is not null
+        and s.sieger =  'Kontra'
+        and (sp.name = sRe.spieler1 or sp.name = sRe.spieler2)
+        group by sp.name
+    ), 
+    Minus_ReT as (
+        select SUM(s.punkte) as punkte, sp.name
+        from spiel s, re sRe, spieler sp
+        where s.re = sRe.id 
+        and sRe.Solo is null
+        and s.sieger =  'Kontra'
+        and (sp.name = sRe.spieler1 or sp.name = sRe.spieler2)
+        group by sp.name
+    ), 
+    Plus_KontraT as (
+        select SUM(s.punkte) as punkte, sp.name
+        from spiel s, kontra, spieler sp
+        where s.kontra = kontra.id 
+        and s.sieger =  'Kontra'
+        and (sp.name = kontra.spieler1 or sp.name = kontra.spieler2 or sp.name = kontra.spieler3)
+        group by sp.name
+    ), 
+    Minus_KontraT as (
+        select SUM(s.punkte) as punkte, sp.name
+        from spiel s, kontra, spieler sp
+        where s.kontra = kontra.id 
+        and s.sieger =  'Re'
+        and (sp.name = kontra.spieler1 or sp.name = kontra.spieler2 or sp.name = kontra.spieler3)
+        group by sp.name
+    ),
+    SummandenT as (
+        select 
+            coalesce(PRS.punkte, 0) as Plus_Re_SoloT, 
+            coalesce(PR.punkte, 0) as Plus_ReT, 
+            coalesce(MRS.punkte, 0) as Minus_Re_SoloT, 
+            coalesce(MR.punkte, 0) as Minus_ReT,
+            coalesce(PK.punkte, 0) as Plus_KontraT, 
+            coalesce(MK.punkte, 0) as Minus_KontraT,  
+            gm.spieler
+        from 
+            gruppenmitglieder gm
+            full join 
+            Plus_Re_SoloT PRS 
+            on gm.spieler = PRS.name
+            full join 
+            Plus_ReT PR
+            on gm.spieler = PR.name
+            full join
+            Minus_Re_SoloT MRS
+            on gm.spieler = MRS.name
+            full join
+            Minus_ReT MR
+            on gm.spieler = MR.name
+            full join
+            Plus_KontraT PK
+            on gm.spieler = PK.name
+            full join
+            Minus_KontraT MK
+            on gm.spieler = MK.name
+            
+        where 
+            gruppe = ` + gruppe + `
+    ),
+    total as (
+        select S.Plus_Re_SoloT + S.Plus_ReT + S.Plus_KontraT - S.Minus_Re_SoloT - S.Minus_ReT  - S.Minus_KontraT as total, S.spieler
+        from SummandenT S
+    )`
+    return result
+}
+
+function today(gruppe, first) {
+    var result = ""
+    if (first) result = result + "With "
+    else result = result + ", "
+    result = result + `
+    byDate as (
+        select spiel.id 
+        from spiel 
+        where datum between current_timestamp - interval '24 hours' and current_timestamp
+    ), 
+    Plus_Re_Solo as (
+        select SUM(s.punkte*3) as punkte, sp.name
+        from spiel s, re sRe, spieler sp
+        where s.re = sRe.id 
+        and s.id in (select * from byDate)
+        and sRe.solo is not null
+        and s.sieger =  'Re'
+        and (sp.name = sRe.spieler1 or sp.name = sRe.spieler2)
+        group by sp.name
+    ), 
+    Plus_Re as (
+        select SUM(s.punkte) as punkte, sp.name
+        from spiel s, re sRe, spieler sp
+        where s.re = sRe.id 
+        and s.id in (select * from byDate)
+        and sRe.Solo is null
+        and s.sieger =  'Re'
+        and (sp.name = sRe.spieler1 or sp.name = sRe.spieler2)
+        group by sp.name
+    ), 
+    Minus_Re_Solo as (
+        select SUM(s.punkte*3) as punkte, sp.name
+        from spiel s, re sRe, spieler sp
+        where s.re = sRe.id 
+        and s.id in (select * from byDate)
+        and sRe.Solo is not null
+        and s.sieger =  'Kontra'
+        and (sp.name = sRe.spieler1 or sp.name = sRe.spieler2)
+        group by sp.name
+    ), 
+    Minus_Re as (
+        select SUM(s.punkte) as punkte, sp.name
+        from spiel s, re sRe, spieler sp
+        where s.re = sRe.id 
+        and s.id in (select * from byDate)
+        and sRe.Solo is null
+        and s.sieger =  'Kontra'
+        and (sp.name = sRe.spieler1 or sp.name = sRe.spieler2)
+        group by sp.name
+    ), 
+    Plus_Kontra as (
+        select SUM(s.punkte) as punkte, sp.name
+        from spiel s, kontra, spieler sp
+        where s.kontra = kontra.id 
+        and s.id in (select * from byDate)
+        and s.sieger =  'Kontra'
+        and (sp.name = kontra.spieler1 or sp.name = kontra.spieler2 or sp.name = kontra.spieler3)
+        group by sp.name
+    ), 
+    Minus_Kontra as (
+        select SUM(s.punkte) as punkte, sp.name
+        from spiel s, kontra, spieler sp
+        where s.kontra = kontra.id 
+        and s.id in (select * from byDate)
+        and s.sieger =  'Re'
+        and (sp.name = kontra.spieler1 or sp.name = kontra.spieler2 or sp.name = kontra.spieler3)
+        group by sp.name
+    ),
+    Summanden as (
+        select 
+            coalesce(PRS.punkte, 0) as Plus_Re_Solo, 
+            coalesce(PR.punkte, 0) as Plus_Re, 
+            coalesce(MRS.punkte, 0) as Minus_Re_Solo, 
+            coalesce(MR.punkte, 0) as Minus_Re,
+            coalesce(PK.punkte, 0) as Plus_Kontra, 
+            coalesce(MK.punkte, 0) as Minus_Kontra,  
+            gm.spieler
+        from 
+            gruppenmitglieder gm
+            full join 
+            Plus_Re_Solo PRS 
+            on gm.spieler = PRS.name
+            full join 
+            Plus_Re PR
+            on gm.spieler = PR.name
+            full join
+            Minus_Re_Solo MRS
+            on gm.spieler = MRS.name
+            full join
+            Minus_Re MR
+            on gm.spieler = MR.name
+            full join
+            Plus_Kontra PK
+            on gm.spieler = PK.name
+            full join
+            Minus_Kontra MK
+            on gm.spieler = MK.name
+            
+        where 
+            gruppe = ` + gruppe + `
+    ),
+    today as (
+        select S.Plus_Re_Solo + S.Plus_Re + S.Plus_Kontra - S.Minus_Re_Solo - S.Minus_Re  - S.Minus_Kontra as today, S.spieler
+        from Summanden S
+    )`
+    return result
+}
+
+function solo_countdown(gruppe, first) {
+    var result = ""
+    if (first) result = result + "With "
+    result = result + `
+    Solo_Countdown as (
+        Select 30 - count(*) as num , gm.spieler
+        from spiel, re, kontra ,gruppenmitglieder gm
+        where spiel.id > (
+            select coalesce(max(spiel.id), 0)
+            from spiel, re
+            where spiel.re = re.id
+            and (gm.spieler = re.spieler1 or gm.spieler = re.spieler2)
+            and re.solo is not null
+        )
+        and spiel.gruppe = ` + gruppe + `
+        and gm.gruppe = ` + gruppe + `
+        and spiel.re = re.id
+        and spiel.kontra = kontra.id
+        and (gm.spieler = re.spieler1 or gm.spieler = re.spieler2 or gm.spieler = kontra.spieler1 or gm.spieler = kontra.spieler2 or gm.spieler = kontra.spieler3)
+        group by gm.spieler
+    )`
+    return result
+}
 
 module.exports = {
     getSpieler: function(gruppe) {
@@ -285,9 +334,12 @@ module.exports = {
             Drop table tempK;
             Drop table tempR;`
     },
-    update_spieler: function(gruppe) {
-        return today + total + `
-            select total.spieler, today.today as today, total.total as total from total, today where total.spieler = today.spieler;`
+    highlevelstats: function(gruppe) {
+        return byDate(gruppe, true) + total(gruppe, false) + today(gruppe, false) + solo_countdown(gruppe, false) + `
+            select total.spieler, today.today as today, total.total as total, solo_countdown.num as solo_countdown
+            from total, today, solo_countdown
+            where total.spieler = today.spieler
+            and total.spieler = solo_countdown.spieler;`
 
 
     }
