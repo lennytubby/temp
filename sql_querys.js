@@ -85,7 +85,7 @@ Minus_Re_SoloT as (
     group by sp.name
 ), 
 Minus_ReT as (
-    select SUM(s.punkte*3) as punkte, sp.name
+    select SUM(s.punkte) as punkte, sp.name
     from spiel s, re sRe, spieler sp
     where s.re = sRe.id 
     and sRe.Solo is null
@@ -184,7 +184,7 @@ Minus_Re_Solo as (
     group by sp.name
 ), 
 Minus_Re as (
-    select SUM(s.punkte*3) as punkte, sp.name
+    select SUM(s.punkte) as punkte, sp.name
     from spiel s, re sRe, spieler sp
     where s.re = sRe.id 
     and s.id in (select * from byDate)
