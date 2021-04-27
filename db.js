@@ -226,7 +226,6 @@ async function delete_last() {
 module.exports.delete_last = delete_last
 
 async function highlevelstats(gruppe) {
-    return console.log(querys.highlevelstats(gruppe))
     if (!(typeof gruppe === "number" || typeof gruppe === "number")) return "bitte eine gruppe angeben"
     try {
         var client = await pool.connect()
