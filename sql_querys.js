@@ -384,7 +384,7 @@ module.exports = {
             if (i === 0) query = query + Your_History(gruppe, names[i], true)
             else query = query + Your_History(gruppe, names[i], false)
         }
-        query = query + "\nselect J.id "
+        query = query + "\nselect J.id, "
         for (var i = 0; i < names.length; i++) {
             query = query + names[i] + "_history.calc as " + names[i] + ", "
         }
