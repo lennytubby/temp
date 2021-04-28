@@ -384,7 +384,7 @@ module.exports = {
             if (i === 0) query = query + Your_History(gruppe, names[i], true)
             else query = query + Your_History(gruppe, names[i], false)
         }
-        query = query + "\nselect "
+        query = query + "\nselect J.id "
         for (var i = 0; i < names.length; i++) {
             query = query + names[i] + "_history.calc as " + names[i] + ", "
         }
@@ -392,7 +392,7 @@ module.exports = {
         for (var i = 0; i < names.length; i++) {
             query = query + names[i] + "_history, "
         }
-        query = query + "(select datum from spiel where spiel.gruppe = " + gruppe + ") as J\nwhere "
+        query = query + "(select id, datum from spiel where spiel.gruppe = " + gruppe + ") as J\nwhere "
         for (var i = 0; i < names.length; i++) {
             if (i === names.length - 1) query = query + names[i] + "_history.datum = J.datum\norder by J.datum desc;"
             else query = query + names[i] + "_history.datum = J.datum and "
