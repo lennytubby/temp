@@ -394,7 +394,7 @@ module.exports = {
         }
         query = query + "(select datum from spiel where spiel.gruppe = " + gruppe + ") as J\nwhere "
         for (var i = 0; i < names.length; i++) {
-            if (i === names.length - 1) query = query + names[i] + "_history.datum = J.datum;"
+            if (i === names.length - 1) query = query + names[i] + "_history.datum = J.datum\norder by J.datum desc;"
             else query = query + names[i] + "_history.datum = J.datum and "
         }
         return query
