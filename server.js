@@ -62,6 +62,12 @@ app.post("/highlevelstats", function(req, res) {
         .then(str => res.end(str))
 })
 
+app.post("/history", function(req, res) {
+    res.set('Content-Type', 'application/json')
+    db.history(req.body.gruppe, req.body.names)
+        .then(str => res.end(str))
+})
+
 app.listen(PORT); //,HOST
 
 console.log(`Running`);

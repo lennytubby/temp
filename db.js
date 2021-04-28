@@ -242,3 +242,21 @@ async function highlevelstats(gruppe) {
     return JSON.stringify(results.rows)
 }
 module.exports.highlevelstats = highlevelstats
+
+async function history(gruppe, names) {
+    if (!(typeof gruppe === "number" || typeof gruppe === "number")) return "bitte eine gruppe angeben"
+    try {
+        var client = await pool.connect()
+    } catch (e) {
+        return 'connection error : ' + e.detail + " , " + e.hint
+    }
+    try {
+        var results = await client.query(querys.history(gruppe, names))
+    } catch (e) {
+        return "history error : " + e.detail + " , " + e.hint
+    } finally {
+        client.release()
+    }
+    return JSON.stringify(results.rows)
+}
+module.exports.history = history

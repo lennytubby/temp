@@ -269,6 +269,47 @@ function today(gruppe, first) {
     return result
 }
 
+function Your_History(gruppe, name, first) {
+    var result = ""
+    if (first) result = result + "With "
+    else result = result + ", "
+    result = result + `
+    ` + name + `_history as (
+        select 
+            case 
+                when (gm.spieler = re.spieler1 or gm.spieler = re.spieler2) then 
+                    case 
+                        when re.solo is not null then 
+                            case 
+                                when s.sieger = 'Re' then s.punkte * 3
+                                else s.punkte * -3
+                            end
+                        else 
+                            case 
+                                when s.sieger = 'Re' then s.punkte 
+                                else s.punkte 
+                            end
+                    end
+                when (gm.spieler = kontra.spieler1 or gm.spieler = kontra.spieler2 or gm.spieler = kontra.spieler3) then
+                    case 
+                        when s.sieger = 'Kontra' then s.punkte 
+                        else s.punkte * -1
+                    end
+                else 0
+            end as calc,
+            gm.spieler as spieler, s.datum as datum
+        from spiel s, re, kontra, gruppenmitglieder gm
+        where s.re = re.id
+        and s.kontra = kontra.id
+        and gm.gruppe = ` + gruppe + `
+        and gm.spieler = '` + name + `'
+        and s.gruppe = ` + gruppe + `
+        order by s.datum
+        )`
+    return result
+}
+
+
 function solo_countdown(gruppe, first) {
     var result = ""
     if (first) result = result + "With "
@@ -336,7 +377,26 @@ module.exports = {
             from total, today, solo_countdown
             where total.spieler = today.spieler
             and total.spieler = solo_countdown.spieler;`
-
-
+    },
+    history: function(gruppe, names) {
+        var query = ""
+        for (var i = 0; i < names.length; i++) {
+            if (i === 0) query = query + Your_History(gruppe, names[i], true)
+            else query = query + Your_History(gruppe, names[i], false)
+        }
+        query = query + "\nselect "
+        for (var i = 0; i < names.length; i++) {
+            query = query + names[i] + "_history.calc as " + names[i] + ", "
+        }
+        query = query + "to_char(J.datum, 'DD.MM.YY HH24:MI') as datum\nfrom "
+        for (var i = 0; i < names.length; i++) {
+            query = query + names[i] + "_history, "
+        }
+        query = query + "(select datum from spiel where spiel.gruppe = " + gruppe + ") as J\nwhere "
+        for (var i = 0; i < names.length; i++) {
+            if (i === names.length - 1) query = query + names[i] + "_history.datum = J.datum;"
+            else query = query + names[i] + "_history.datum = J.datum and "
+        }
+        return query
     }
 }
