@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "74417149-23a9-4898-addb-05345846ecea",
+		"_postman_id": "5dd9900d-379a-4891-8a75-5c7c94ed5a1e",
 		"name": "Doppelkopf",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -13,7 +13,7 @@
 					"basic": [
 						{
 							"key": "password",
-							"value": "SuperDuperPassword.1",
+							"value": "Kv48d0b&At!FiJs",
 							"type": "string"
 						},
 						{
@@ -52,13 +52,13 @@
 					"type": "basic",
 					"basic": [
 						{
-							"key": "password",
-							"value": "Password1",
+							"key": "username",
+							"value": "lenny",
 							"type": "string"
 						},
 						{
-							"key": "username",
-							"value": "PRESALES_USER",
+							"key": "password",
+							"value": "Kv48d0b&At!FiJs",
 							"type": "string"
 						}
 					]
@@ -86,13 +86,13 @@
 					"type": "basic",
 					"basic": [
 						{
-							"key": "password",
-							"value": "Password1",
+							"key": "username",
+							"value": "lenny",
 							"type": "string"
 						},
 						{
-							"key": "username",
-							"value": "PRESALES_USER",
+							"key": "password",
+							"value": "Kv48d0b&At!FiJs",
 							"type": "string"
 						}
 					]
@@ -130,12 +130,12 @@
 					"basic": [
 						{
 							"key": "password",
-							"value": "Password1",
+							"value": "Kv48d0b&At!FiJs",
 							"type": "string"
 						},
 						{
 							"key": "username",
-							"value": "PRESALES_USER",
+							"value": "lenny",
 							"type": "string"
 						}
 					]

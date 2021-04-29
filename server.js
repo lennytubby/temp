@@ -2,7 +2,6 @@
 
 const express = require('express');
 const db = require("./db.js")
-const basicAuth = require('express-basic-auth')
 var cors = require('cors')
 const basicAuth = require('express-basic-auth')
 
@@ -14,11 +13,6 @@ const PORT = 8880;
 
 // App
 const app = express();
-/*
-app.use(basicAuth({
-    users: { 'lenny': 'SuperDuperPassword.1' }
-}))
-*/
 app.use(express.json())
 app.use(cors())
 
