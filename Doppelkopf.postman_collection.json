@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "5dd9900d-379a-4891-8a75-5c7c94ed5a1e",
+		"_postman_id": "d201ac9f-8455-408b-aa8e-2b2d2dc4b2b6",
 		"name": "Doppelkopf",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -123,7 +123,7 @@
 			"response": []
 		},
 		{
-			"name": "update spieler",
+			"name": "HighLevelStats",
 			"request": {
 				"auth": {
 					"type": "basic",
@@ -142,15 +142,67 @@
 				},
 				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"gruppe\":1}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "hipercap.de:8880/updatespieler",
+					"raw": "hipercap.de:8880/highlevelstats",
 					"host": [
 						"hipercap",
 						"de"
 					],
 					"port": "8880",
 					"path": [
-						"updatespieler"
+						"highlevelstats"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "History",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "Kv48d0b&At!FiJs",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "lenny",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"gruppe\":1,\r\n    \"names\":[\"Lenny\",\"Neli\",\"Frank\",\"Bene\",\"Tassi\"]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "hipercap.de:8880/history",
+					"host": [
+						"hipercap",
+						"de"
+					],
+					"port": "8880",
+					"path": [
+						"history"
 					]
 				}
 			},
