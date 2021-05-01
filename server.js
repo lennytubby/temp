@@ -71,7 +71,6 @@ app.post("/history", function(req, res) {
 app.listen(PORT); //,HOST
 
 console.log(`Running`);
-console.log(db.history(1,['Lenny','Neli','Frank','Bene','Tassi']))
 
 /* cant figure out
  *
