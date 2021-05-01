@@ -52,7 +52,7 @@ app.post("/delete", function(req, res) {
 
 app.post("/deletelast", function(req, res) {
     res.set('Content-Type', 'application/json')
-    db.delete_last()
+    db.delete_last(req.body.gruppe)
         .then(str => res.end(str))
 })
 

@@ -210,14 +210,14 @@ async function delete_spiel(ID) {
 }
 module.exports.delete_spiel = delete_spiel
 
-async function delete_last() {
+async function delete_last(gruppe) {
     try {
         var client = await pool.connect()
     } catch (e) {
         return 'connection error : ' + e.detail + " , " + e.hint
     }
     try {
-        var results = await client.query(querys.delete_last)
+        var results = await client.query(querys.delete_last(gruppe))
     } catch (e) {
         return "Delete error : " + e.detail + " , " + e.hint
     } finally {
