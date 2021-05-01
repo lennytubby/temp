@@ -287,7 +287,7 @@ function Your_History(gruppe, name, first) {
                         else 
                             case 
                                 when s.sieger = 'Re' then s.punkte 
-                                else s.punkte 
+                                else s.punkte * -1
                             end
                     end
                 when (gm.spieler = kontra.spieler1 or gm.spieler = kontra.spieler2 or gm.spieler = kontra.spieler3) then
