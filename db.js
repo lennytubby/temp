@@ -193,7 +193,7 @@ async function get_solos() {
 module.exports.get_solos = get_solos
 
 async function delete_spiel(ID) {
-    if (!(typeof gruppe === "number" || typeof gruppe === "number")) return "bitte eine spiel id angeben"
+    if (!(typeof ID === "number" )) return "bitte eine spiel id angeben"
     try {
         var client = await pool.connect()
     } catch (e) {
