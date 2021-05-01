@@ -47,6 +47,8 @@ async function insert_data(data) {
         return 'connection error : ' + e.detail + " , " + e.hint
     }
 
+    // validate input
+
     if (data.fehlspiel) {
         var spiel_query = "INSERT INTO Spiel (Gruppe, Punkte, Fehlspiel) VALUES (" + data.gruppe + ", " +
             12 + ", " + data.Spielfehler + ") RETURNING id;"
@@ -244,6 +246,7 @@ async function highlevelstats(gruppe) {
 module.exports.highlevelstats = highlevelstats
 
 async function history(gruppe, names) {
+    return console.log(querys.history(gruppe, names))
     if (!(typeof gruppe === "number" || typeof gruppe === "number")) return "bitte eine gruppe angeben"
     try {
         var client = await pool.connect()
