@@ -142,7 +142,7 @@ async function get_gruppen() {
     } catch (e) {
         return 'connection error : ' + e.detail + " , " + e.hint + ", " + JSON.stringify(e)
     }
-    var query = "select name, id, spiele from gruppe;"
+    var query = "select name, id from gruppe;"
     try {
         var results = await client.query(query)
     } catch (e) {
