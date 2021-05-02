@@ -316,21 +316,28 @@ function solo_countdown(gruppe, first) {
     else result = result + ", "
     result = result + `
     Solo_Countdown as (
-        Select 30 - count(*) as num , gm.spieler
-        from spiel, re, kontra ,gruppenmitglieder gm
-        where spiel.id > (
-            select coalesce(max(spiel.id), 0)
-            from spiel, re
-            where spiel.re = re.id
-            and (gm.spieler = re.spieler1 or gm.spieler = re.spieler2)
-            and re.solo is not null
-        )
-        and spiel.gruppe = ` + gruppe + `
-        and gm.gruppe = ` + gruppe + `
-        and spiel.re = re.id
-        and spiel.kontra = kontra.id
-        and (gm.spieler = re.spieler1 or gm.spieler = re.spieler2 or gm.spieler = kontra.spieler1 or gm.spieler = kontra.spieler2 or gm.spieler = kontra.spieler3)
-        group by gm.spieler
+        Select coalesce(X.num, 30), g.spieler 
+        from (
+            Select 30 - count(*) as num , gm.spieler
+            from spiel, re, kontra ,gruppenmitglieder gm
+            where spiel.id > (
+                select coalesce(max(spiel.id), 0)
+                from spiel, re
+                where spiel.re = re.id
+                and (gm.spieler = re.spieler1 or gm.spieler = re.spieler2)
+                and re.solo is not null
+            )
+            and spiel.gruppe = ` + gruppe + `
+            and gm.gruppe = ` + gruppe + `
+            and spiel.re = re.id
+            and spiel.kontra = kontra.id
+            and (gm.spieler = re.spieler1 or gm.spieler = re.spieler2 or gm.spieler = kontra.spieler1 or gm.spieler = kontra.spieler2 or gm.spieler = kontra.spieler3)
+            group by gm.spieler
+        ) as X
+        right join 
+        gruppenmitglieder g
+        on g.spieler = X.spieler
+        where g.gruppe = ` + gruppe + `
     )`
     return result
 }
