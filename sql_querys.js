@@ -316,7 +316,7 @@ function solo_countdown(gruppe, first) {
     else result = result + ", "
     result = result + `
     Solo_Countdown as (
-        Select coalesce(X.num, 30), g.spieler 
+        Select coalesce(X.num, 30) as num, g.spieler 
         from (
             Select 30 - count(*) as num , gm.spieler
             from spiel, re, kontra ,gruppenmitglieder gm
