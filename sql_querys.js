@@ -337,12 +337,12 @@ function solo_countdown(gruppe, first) {
 
 module.exports = {
     getSpieler: function(gruppe) {
-        return getTODAY + `
-            select today, gT.name, punkte, solo_countdown, bild
-            from getToday gT, spieler s, gruppenmitglieder gm
-            where gruppe = ` + gruppe + ` 
-            and s.name = gm.spieler
-            and s.name = gT.name;`
+        return byDate(gruppe, true) + total(gruppe, false) + today(gruppe, false) + solo_countdown(gruppe, false) + `
+            select total.spieler, today.today as today, total.total as total, solo_countdown.num as solo_countdown, bild
+            from total, today, solo_countdown, spieler ss
+            where total.spieler = today.spieler
+            and total.spieler = solo_countdown.spieler
+            and ss.name = total.spieler;`
     },
     insertResponse: function(kontra_spieler1, kontra_spieler2, kontra_spieler3, re_spieler1, re_spieler2, gruppe) {
         return getTODAY + `
