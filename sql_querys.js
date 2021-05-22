@@ -374,7 +374,7 @@ module.exports = {
         return `
             select spiel.re into tempR from spiel where id = ` + id + `;
             select spiel.kontra into tempK from spiel where id = ` + id + `;
-            Delete from spiel where id = id;
+            Delete from spiel where id = ` + id + `;
             Delete from re where re.id = (select * from tempR);
             Delete from kontra where kontra.id = (select * from tempK);
             Drop table tempK;
