@@ -349,7 +349,8 @@ module.exports = {
             from total, today, solo_countdown, spieler ss
             where total.spieler = today.spieler
             and total.spieler = solo_countdown.spieler
-            and ss.name = total.spieler;`
+            and ss.name = total.spieler
+            order by total.total desc;`
     },
     insertResponse: function(kontra_spieler1, kontra_spieler2, kontra_spieler3, re_spieler1, re_spieler2, gruppe) {
         return getTODAY + `
