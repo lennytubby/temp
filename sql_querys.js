@@ -325,7 +325,7 @@ function solo_countdown(gruppe, first) {
                 from spiel, re
                 where spiel.re = re.id
                 and (gm.spieler = re.spieler1 or gm.spieler = re.spieler2)
-                and re.solo is not null
+                and re.solo in ('Bubensolo', 'Damensolo', 'Fleischloser', 'Farbsolo')
             )
             and spiel.gruppe = ` + gruppe + `
             and gm.gruppe = ` + gruppe + `
@@ -385,7 +385,8 @@ module.exports = {
             select total.spieler, today.today as today, total.total as total, solo_countdown.num as solo_countdown
             from total, today, solo_countdown
             where total.spieler = today.spieler
-            and total.spieler = solo_countdown.spieler;`
+            and total.spieler = solo_countdown.spieler
+            order by total.total desc;`
     },
     history: function(gruppe, names) {
         var query = ""
