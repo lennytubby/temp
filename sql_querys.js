@@ -81,6 +81,7 @@ function total(gruppe, first) {
         and sRe.solo is not null
         and s.sieger =  'Re'
         and (sp.name = sRe.spieler1 or sp.name = sRe.spieler2)
+        and s.gruppe = ` + gruppe + `
         group by sp.name
     ), 
     Plus_ReT as (
@@ -90,6 +91,7 @@ function total(gruppe, first) {
         and sRe.Solo is null
         and s.sieger =  'Re'
         and (sp.name = sRe.spieler1 or sp.name = sRe.spieler2)
+        and s.gruppe = ` + gruppe + `
         group by sp.name
     ), 
     Minus_Re_SoloT as (
@@ -99,6 +101,7 @@ function total(gruppe, first) {
         and sRe.Solo is not null
         and s.sieger =  'Kontra'
         and (sp.name = sRe.spieler1 or sp.name = sRe.spieler2)
+        and s.gruppe = ` + gruppe + `
         group by sp.name
     ), 
     Minus_ReT as (
@@ -108,6 +111,7 @@ function total(gruppe, first) {
         and sRe.Solo is null
         and s.sieger =  'Kontra'
         and (sp.name = sRe.spieler1 or sp.name = sRe.spieler2)
+        and s.gruppe = ` + gruppe + `
         group by sp.name
     ), 
     Plus_KontraT as (
@@ -116,6 +120,7 @@ function total(gruppe, first) {
         where s.kontra = kontra.id 
         and s.sieger =  'Kontra'
         and (sp.name = kontra.spieler1 or sp.name = kontra.spieler2 or sp.name = kontra.spieler3)
+        and s.gruppe = ` + gruppe + `
         group by sp.name
     ), 
     Minus_KontraT as (
@@ -124,6 +129,7 @@ function total(gruppe, first) {
         where s.kontra = kontra.id 
         and s.sieger =  'Re'
         and (sp.name = kontra.spieler1 or sp.name = kontra.spieler2 or sp.name = kontra.spieler3)
+        and s.gruppe = ` + gruppe + `
         group by sp.name
     ),
     SummandenT as (
@@ -179,6 +185,7 @@ function today(gruppe, first) {
         and sRe.solo is not null
         and s.sieger =  'Re'
         and (sp.name = sRe.spieler1 or sp.name = sRe.spieler2)
+        and s.gruppe = ` + gruppe + `
         group by sp.name
     ), 
     Plus_Re as (
@@ -189,6 +196,7 @@ function today(gruppe, first) {
         and sRe.Solo is null
         and s.sieger =  'Re'
         and (sp.name = sRe.spieler1 or sp.name = sRe.spieler2)
+        and s.gruppe = ` + gruppe + `
         group by sp.name
     ), 
     Minus_Re_Solo as (
@@ -199,6 +207,7 @@ function today(gruppe, first) {
         and sRe.Solo is not null
         and s.sieger =  'Kontra'
         and (sp.name = sRe.spieler1 or sp.name = sRe.spieler2)
+        and s.gruppe = ` + gruppe + `
         group by sp.name
     ), 
     Minus_Re as (
@@ -209,6 +218,7 @@ function today(gruppe, first) {
         and sRe.Solo is null
         and s.sieger =  'Kontra'
         and (sp.name = sRe.spieler1 or sp.name = sRe.spieler2)
+        and s.gruppe = ` + gruppe + `
         group by sp.name
     ), 
     Plus_Kontra as (
@@ -218,6 +228,7 @@ function today(gruppe, first) {
         and s.id in (select * from byDate)
         and s.sieger =  'Kontra'
         and (sp.name = kontra.spieler1 or sp.name = kontra.spieler2 or sp.name = kontra.spieler3)
+        and s.gruppe = ` + gruppe + `
         group by sp.name
     ), 
     Minus_Kontra as (
@@ -227,6 +238,7 @@ function today(gruppe, first) {
         and s.id in (select * from byDate)
         and s.sieger =  'Re'
         and (sp.name = kontra.spieler1 or sp.name = kontra.spieler2 or sp.name = kontra.spieler3)
+        and s.gruppe = ` + gruppe + `
         group by sp.name
     ),
     Summanden as (
