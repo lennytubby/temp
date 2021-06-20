@@ -50,6 +50,7 @@ async function insert_data(data) {
 
     // validate input
 
+    /*
     if (data.fehlspiel) {
         var spiel_query = "INSERT INTO Spiel (Gruppe, Punkte, Fehlspiel) VALUES (" + data.gruppe + ", " +
             12 + ", " + data.Spielfehler + ") RETURNING id;"
@@ -60,6 +61,7 @@ async function insert_data(data) {
         }
         return results.rows[0].id
     } else {
+        */
 
         //RE
         if (data.re.solo) {
@@ -115,8 +117,14 @@ async function insert_data(data) {
         if (!(data.sieger == "Re" || data.sieger == "Kontra")) {
             return "Sieger nicht eindeutig"
         }
-        var spiel_query = "INSERT INTO Spiel (Gruppe, Re, Kontra, Punkte, Sieger) VALUES (" + data.gruppe + ", " +
-            re_id + ", " + kontra_id + ", " + data.punkte + ", \'" + data.sieger + "\') RETURNING id;"
+        if (data.fehlspiel) {
+            var spiel_query = "INSERT INTO Spiel (Gruppe, Re, Kontra, Punkte, Sieger, Fehlspiel) VALUES (" + data.gruppe + ", " +
+                re_id + ", " + kontra_id + ", " + data.punkte + ", \'" + data.sieger + "\', " + data.fehlspiel + ") RETURNING id;"
+        }
+        else {
+            var spiel_query = "INSERT INTO Spiel (Gruppe, Re, Kontra, Punkte, Sieger) VALUES (" + data.gruppe + ", " +
+                re_id + ", " + kontra_id + ", " + data.punkte + ", \'" + data.sieger + "\') RETURNING id;"
+        }
         try {
             var results = await client.query(spiel_query)
         } catch (e) {
@@ -133,7 +141,7 @@ async function insert_data(data) {
             client.release()
         }
         return JSON.stringify(results.rows)
-    }
+    //}
 }
 module.exports.insert_data = insert_data
 
