@@ -132,6 +132,27 @@ function total(gruppe, first) {
         and s.gruppe = ` + gruppe + `
         group by sp.name
     ),
+    Minus_FehlspielT as (
+        select SUM(3 * g.kategorie) as punkte, f.name
+        from spiel s, fehlspiel f, fehlspielgrund g
+        where s.fehlspiel = f.id
+        and f.grund = g.id
+        and s.gruppe = ` + gruppe + `
+        group by f.spieler
+    ),
+    Plus_FehlspielT as (
+        select SUM(g.kategorie) as punkte, sp.name
+        from spiel s, fehlspiel f, fehlspielgrund g, re, kontra
+        where s.fehlspiel is not null
+        and s.fehlspiel = f.id
+        and f.grund = g.id
+        and s.re = re.id
+        and s.kontra = kontra.id
+        and not sp.name = f.spieler
+        and (sp.name = re.spieler1 or sp.name = re.spieler2 or sp.name = kontra.spieler1 or sp.name = kontra.spieler2 or sp.name = kontra.spieler3 )
+        and s.gruppe = ` + gruppe + `
+        group by f.spieler
+    ),
     SummandenT as (
         select 
             coalesce(PRS.punkte, 0) as Plus_Re_SoloT, 
@@ -140,6 +161,8 @@ function total(gruppe, first) {
             coalesce(MR.punkte, 0) as Minus_ReT,
             coalesce(PK.punkte, 0) as Plus_KontraT, 
             coalesce(MK.punkte, 0) as Minus_KontraT,  
+            coalesce(PF.punkte, 0) as Plus_FehlspielT,  
+            coalesce(MF.punkte, 0) as Minus_FehlspielT,  
             gm.spieler
         from 
             gruppenmitglieder gm
@@ -161,6 +184,12 @@ function total(gruppe, first) {
             full join
             Minus_KontraT MK
             on gm.spieler = MK.name
+            full join
+            Minus_FehlspielT MF
+            on gm.spieler = MF.name
+            full join
+            Plus_FehlspielT PF
+            on gm.spieler = PF.name
             
         where 
             gruppe = ` + gruppe + `
