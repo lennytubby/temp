@@ -195,7 +195,7 @@ function total(gruppe, first) {
             gruppe = ` + gruppe + `
     ),
     total as (
-        select S.Plus_Re_SoloT + S.Plus_ReT + S.Plus_KontraT - S.Minus_Re_SoloT - S.Minus_ReT  - S.Minus_KontraT as total, S.spieler
+        select S.Plus_Re_SoloT + S.Plus_ReT + S.Plus_KontraT + Plus_FehlspielT - S.Minus_Re_SoloT - S.Minus_ReT  - S.Minus_KontraT - S.Minus_FehlspielT as total, S.spieler
         from SummandenT S
     )`
     return result
