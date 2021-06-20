@@ -124,7 +124,7 @@ function total(gruppe, first) {
         group by sp.name
     ), 
     Minus_KontraT as (
-        select SUM(s.punkte) as punkte, sp.name
+        select SUM(s.punkte) as punkte, sp.name as name
         from spiel s, kontra, spieler sp
         where s.kontra = kontra.id 
         and s.sieger =  'Re'
@@ -133,7 +133,7 @@ function total(gruppe, first) {
         group by sp.name
     ),
     Minus_FehlspielT as (
-        select SUM(3 * g.kategorie) as punkte, f.name
+        select SUM(3 * g.kategorie) as punkte, f.spieler as name
         from spiel s, fehlspiel f, fehlspielgrund g
         where s.fehlspiel = f.id
         and f.grund = g.id
@@ -142,7 +142,7 @@ function total(gruppe, first) {
     ),
     Plus_FehlspielT as (
         select SUM(g.kategorie) as punkte, sp.name
-        from spiel s, fehlspiel f, fehlspielgrund g, re, kontra
+        from spiel s, fehlspiel f, fehlspielgrund g, re, kontra, spieler sp
         where s.fehlspiel is not null
         and s.fehlspiel = f.id
         and f.grund = g.id
@@ -151,7 +151,7 @@ function total(gruppe, first) {
         and not sp.name = f.spieler
         and (sp.name = re.spieler1 or sp.name = re.spieler2 or sp.name = kontra.spieler1 or sp.name = kontra.spieler2 or sp.name = kontra.spieler3 )
         and s.gruppe = ` + gruppe + `
-        group by f.spieler
+        group by sp.name
     ),
     SummandenT as (
         select 
