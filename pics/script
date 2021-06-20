@@ -1,4 +1,8 @@
 #!/bin/bash
+if [[ $# -eq 0 ]] ; then
+    echo 'first arg: ./Bild.png , second arg: spielername'
+    exit 0
+fi
 bild=$( base64 $1 )
 PGPASSWORD=SbotmtWigrm.1 psql -U postgres -d doppelkopf -c "update spieler set bild='$bild' where name='$2';"
 

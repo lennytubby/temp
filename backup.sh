@@ -1,10 +1,13 @@
 #! /bin/bash
-mkdir -p doppelkopf_backup
-name=$(date +'%d.%m.%Y')5
-pg_dump -U postgres -w doppelkopf > doppelkopf_backup/$name 
+#mkdir -p doppelkopf_backup
+base_path=~/projects/doppelkopf/doppelkopf_backup/
+name=$(date +'%d.%m.%Y')
+pg_dump -U postgres -w doppelkopf > $base_path$name 
 
 # only keep the backup if something changed
-last=$(ls -t doppelkopf_backup | sed -n 2p)
-if cmp -s "doppelkopf_backup/"$name "doppelkopf_backup/"$last; then
-	rm doppelkopf_backup/$name
+last=$(ls -t $base_path | sed -n 2p)
+last_path=${base_path}${last}
+new_path=${base_path}${name}
+if cmp -s $new_path $last_path; then
+	rm $new_path
 fi
